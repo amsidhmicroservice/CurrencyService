@@ -6,7 +6,6 @@
         <groupId>com.amsidh.mvc</groupId>
         <artifactId>currencyservice</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <artifactId>currencyexchange</artifactId>
     <name>currencyexchange</name>
