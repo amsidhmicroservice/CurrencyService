@@ -22,7 +22,8 @@ spec:
         app: currencyconversion
     spec:
       containers:
-        - image: amsidhmicroservice/currencyconversion:latest
+#        - image: amsidhmicroservice/currencyconversion:latest
+        - image: gcr.io/spring-cloud-deployment-323906/currencyconversion:latest
           imagePullPolicy: IfNotPresent
           name: currencyconversion
           ports:

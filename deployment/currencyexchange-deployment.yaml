@@ -21,7 +21,8 @@ spec:
         app: currencyexchange
     spec:
       containers:
-        - image: amsidhmicroservice/currencyexchange:latest
+#        - image: amsidhmicroservice/currencyexchange:latest
+        - image: gcr.io/spring-cloud-deployment-323906/currencyexchange:latest
           imagePullPolicy: IfNotPresent
           name: currencyexchange
           ports:
