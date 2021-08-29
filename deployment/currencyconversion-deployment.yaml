@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: currencyconversion
+  name: currencyconversion
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: currencyconversion
+  strategy: { }
+  template:
+    metadata:
+      labels:
+        io.kompose.service: currencyconversion
+    spec:
+      containers:
+        - image: amsidhmicroservice/currencyconversion:latest
+          imagePullPolicy: Always
+          env:
+            - name: CURRENCY_EXCHANGE_URI
+              value: currencyexchange
+          name: currencyconversion
+          ports:
+            - containerPort: 8282
+      restartPolicy: Always

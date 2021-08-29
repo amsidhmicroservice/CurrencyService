@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: currencyexchange
+  name: currencyexchange
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: currencyexchange
+  strategy: { }
+  template:
+    metadata:
+      labels:
+        io.kompose.service: currencyexchange
+    spec:
+      containers:
+        - image: amsidhmicroservice/currencyexchange:latest
+          imagePullPolicy: Always
+          name: currencyexchange
+          ports:
+            - containerPort: 8181
+      restartPolicy: Always
