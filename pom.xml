@@ -109,8 +109,8 @@
     </build>
 
     <modules>
-        <module>CurrencyExchange</module>
-        <module>CurrencyConversion</module>
+        <module>currencyexchange</module>
+        <module>currencyconversion</module>
     </modules>
 
     <profiles>
