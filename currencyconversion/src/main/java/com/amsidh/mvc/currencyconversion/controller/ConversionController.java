@@ -21,9 +21,14 @@ public class ConversionController {
     private final CurrencyExchangeService currencyExchangeService;
     private final InstanceInformationService instanceInformationService;
 
+    @GetMapping("/")
+    public String healthCheck() {
+        return "{status:up}";
+    }
+
     @GetMapping(value = {"/currency-conversion/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
-       log.info("Inside convertCurrency method of ConversionController!!!");
+        log.info("Inside convertCurrency method of ConversionController!!!");
         Exchange exchange = currencyExchangeService.getExchange(currencyFrom, currencyTo);
         CurrencyConversionResponse currencyConversionResponse = CurrencyConversionResponse.builder()
                 .id(exchange.getId())

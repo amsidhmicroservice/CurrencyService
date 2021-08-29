@@ -17,6 +17,11 @@ public class ExchangeController {
     private final ExchangeRepository exchangeRepository;
     private final InstanceInformationService instanceInformationService;
 
+    @GetMapping("/")
+    public String healthCheck() {
+        return "{status:up}";
+    }
+
     //http://localhost:8181/currency-exchange/USD/to/INR
     @GetMapping(value = "/currency-exchange/{currencyFrom}/to/{currencyTo}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Exchange getCurrencyExchange(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo) {
