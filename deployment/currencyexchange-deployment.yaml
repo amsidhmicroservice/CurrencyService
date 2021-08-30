@@ -58,7 +58,7 @@ metadata:
   name: currency-exchange
   namespace: default
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - name: "8181"
       port: 8181

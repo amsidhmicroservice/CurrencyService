@@ -61,7 +61,7 @@ metadata:
     app: currency-conversion
   name: currency-conversion
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - name: "8282"
       port: 8282
