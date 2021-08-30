@@ -1,4 +1,8 @@
-name: currency-service-github-action
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: currencyservice-github-action
+
 on:
   push:
     branches: [ master ]
@@ -7,9 +11,12 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '30 4,17 * * *'
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8 for currencyservice
