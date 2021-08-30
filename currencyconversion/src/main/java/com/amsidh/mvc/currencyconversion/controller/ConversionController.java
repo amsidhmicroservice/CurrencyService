@@ -23,6 +23,7 @@ public class ConversionController {
 
     @GetMapping("/")
     public String healthCheck() {
+        log.info("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
         return "{status:up}";
     }
 

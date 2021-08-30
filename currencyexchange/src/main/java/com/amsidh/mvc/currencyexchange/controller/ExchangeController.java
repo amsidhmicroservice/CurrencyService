@@ -19,6 +19,7 @@ public class ExchangeController {
 
     @GetMapping("/")
     public String healthCheck() {
+        log.info("healthCheck method of ExchangeController on host " + instanceInformationService.retrieveInstanceInfo());
         return "{status:up}";
     }
 
