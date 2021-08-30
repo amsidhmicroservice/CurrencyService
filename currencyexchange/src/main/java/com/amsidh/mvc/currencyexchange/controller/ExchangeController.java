@@ -22,7 +22,7 @@ public class ExchangeController {
         return "{status:up}";
     }
 
-    //http://localhost:8181/currency-exchange/USD/to/INR
+    //http://34.121.35.177:8181/currency-exchange/USD/to/INR
     @GetMapping(value = "/currency-exchange/{currencyFrom}/to/{currencyTo}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Exchange getCurrencyExchange(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo) {
         log.info("Inside getCurrencyExchange method of ExchangeRepository");

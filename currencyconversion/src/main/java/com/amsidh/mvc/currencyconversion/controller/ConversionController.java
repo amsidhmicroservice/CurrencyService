@@ -26,11 +26,13 @@ public class ConversionController {
         return "{status:up}";
     }
 
+
+    //http://35.222.88.162:8282/currency-conversion/from/USD/to/INR/quantity/100
     @GetMapping(value = {"/currency-conversion/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
         log.info("Inside convertCurrency method of ConversionController!!!");
         Exchange exchange = currencyExchangeService.getExchange(currencyFrom, currencyTo);
-        CurrencyConversionResponse currencyConversionResponse = CurrencyConversionResponse.builder()
+        return CurrencyConversionResponse.builder()
                 .id(exchange.getId())
                 .from(exchange.getCurrencyFrom())
                 .to(exchange.getCurrencyTo())
@@ -40,6 +42,5 @@ public class ConversionController {
                 .exchangeEnvironmentInfo(exchange.getExchangeEnvironmentInfo())
                 .totalCalculatedAmount(quantity.multiply(exchange.getConversionMultiple()))
                 .build();
-        return currencyConversionResponse;
     }
 }
