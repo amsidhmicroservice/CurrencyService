@@ -1,4 +1,8 @@
-name: currency-service-github-action
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: currencyservice-github-action
+
 on:
   push:
     branches: [ master ]
@@ -7,20 +11,23 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '30 4,17 * * *'
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - name: Login to gcloud registry
-        id: gcloud
-        uses: elgohr/gcloud-login-action@0.2
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8 for currencyservice
+        uses: actions/setup-java@v2
         with:
-          account_key: ${{ secrets.GCLOUD_KEY }}
-      - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          name: myDocker/repository
-          username: ${{ secrets.STEPS_GCLOUD_OUTPUTS_USERNAME }}
-          password: ${{ secrets.STEPS_GCLOUD_OUTPUTS_PASSWORD }}
-          registry: gcr.io, us.gcr.io, eu.gcr.io or asia.gcr.io
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+      - name: Build currencyservice with Maven and push to docker-hub
+        run: mvn -B clean install -P build-push --file pom.xml
