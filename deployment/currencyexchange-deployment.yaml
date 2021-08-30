@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: currencyexchange
-  name: currencyexchange
+    app: currency-exchange
+  name: currency-exchange
 spec:
   replicas: 1
   minReadySeconds: 45
   selector:
     matchLabels:
-      app: currencyexchange
+      app: currency-exchange
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,13 +18,13 @@ spec:
   template:
     metadata:
       labels:
-        app: currencyexchange
+        app: currency-exchange
     spec:
       containers:
         - image: amsidhmicroservice/currencyexchange:latest
 #        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: IfNotPresent
-          name: currencyexchange
+          name: currency-exchange
           ports:
             - name: liveness-port
               containerPort: 8181
@@ -54,8 +54,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: currencyexchange
-  name: currencyexchange
+    app: currency-exchange
+  name: currency-exchange
   namespace: default
 spec:
   type: LoadBalancer
@@ -65,5 +65,5 @@ spec:
       protocol: TCP
       targetPort: 8181
   selector:
-    app: currencyexchange
+    app: currency-exchange
   sessionAffinity: None
