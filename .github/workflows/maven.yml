@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Login to gcloud registry
         id: gcloud
-        uses: elgohr/gcloud-login-action@master
+        uses: elgohr/gcloud-login-action@0.2
         with:
           account_key: ${{ secrets.GCLOUD_KEY }}
       - name: Publish to Registry
