@@ -29,9 +29,9 @@ spec:
           ports:
             - name: liveness-port
               containerPort: 8282
-          env:
-            - name: CURRENCY_EXCHANGE_URI
-              value: currencyexchange
+#          env:
+#            - name: CURRENCY_EXCHANGE_URI
+#              value: currencyexchange
           resources:
             requests:
               memory: 512Mi
