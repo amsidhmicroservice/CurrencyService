@@ -9,7 +9,7 @@
     </parent>
     <artifactId>currencyexchange</artifactId>
     <name>currencyexchange</name>
-    <description>currencyexchange project for Spring Boot</description>
+    <description>Currency-Exchange project for Spring Boot</description>
     <properties>
         <docker.skip>false</docker.skip>
     </properties>
