@@ -21,7 +21,7 @@ spec:
         app: currency-exchange
     spec:
       containers:
-        - image: amsidhmicroservice/currencyexchange:latest
+        - image: amsidhmicroservice/currencyexchange:0.0.2-SNAPSHOT
 #        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: IfNotPresent
           name: currency-exchange
