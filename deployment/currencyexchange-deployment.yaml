@@ -5,7 +5,7 @@ metadata:
     app: currency-exchange
   name: currency-exchange
 spec:
-  replicas: 1
+  replicas: 3
   minReadySeconds: 45
   selector:
     matchLabels:
