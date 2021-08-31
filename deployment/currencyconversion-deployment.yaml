@@ -22,7 +22,7 @@ spec:
         app: currency-conversion
     spec:
       containers:
-        - image: amsidhmicroservice/currencyconversion:0.0.2-SNAPSHOT
+        - image: amsidhmicroservice/currencyconversion:latest
 #        - image: gcr.io/microservice-324508/currencyconversion:latest
           imagePullPolicy: IfNotPresent
           name: currency-conversion
