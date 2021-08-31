@@ -29,10 +29,9 @@ spec:
           ports:
             - name: liveness-port
               containerPort: 8282
-# Commented out after adding ribbon as client side load balancing. Change-1
-#          env:
-#            - name: CURRENCY_EXCHANGE_URI
-#              value: currency-exchange
+          env:
+            - name: CURRENCY_EXCHANGE_URI
+              value: currency-exchange
           resources:
             requests:
               memory: 512Mi
