@@ -2,6 +2,7 @@ package com.amsidh.mvc.currencyconversion.controller;
 
 import com.amsidh.mvc.currencyconversion.client.CurrencyExchangeService;
 import com.amsidh.mvc.currencyconversion.client.response.Exchange;
+import com.amsidh.mvc.currencyconversion.prop.EnvironmentConfigurationLogger;
 import com.amsidh.mvc.currencyconversion.response.CurrencyConversionResponse;
 import com.amsidh.mvc.currencyconversion.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,11 @@ public class ConversionController {
 
     private final CurrencyExchangeService currencyExchangeService;
     private final InstanceInformationService instanceInformationService;
+    private final EnvironmentConfigurationLogger environmentConfigurationLogger;
 
     @GetMapping("/")
     public String healthCheck() {
-        log.info("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
+        //log.debug("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
         return "{status:up}";
     }
 

@@ -5,7 +5,7 @@ metadata:
     app: currency-exchange
   name: currency-exchange
 spec:
-  replicas: 3
+  replicas: 1
   minReadySeconds: 45
   selector:
     matchLabels:
@@ -21,7 +21,7 @@ spec:
         app: currency-exchange
     spec:
       containers:
-        - image: amsidhmicroservice/currencyexchange:latest
+        - image: amsidhmicroservice/currencyexchange:0.0.1-SNAPSHOT
 #        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: IfNotPresent
           name: currency-exchange
@@ -58,12 +58,8 @@ metadata:
   name: currency-exchange
   namespace: default
 spec:
-  type: NodePort
   ports:
-    - name: "8181"
+    - name: http
       port: 8181
-      protocol: TCP
-      targetPort: 8181
   selector:
     app: currency-exchange
-  sessionAffinity: None
