@@ -3,16 +3,14 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 0.0.1-SNAPSHOT
-  name: currency-conversion-v1
+  name: currency-conversion
   namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   minReadySeconds: 45
   selector:
     matchLabels:
       app: currency-conversion
-      version: 0.0.1-SNAPSHOT
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -22,7 +20,6 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 0.0.1-SNAPSHOT
     spec:
       containers:
         - image: amsidhmicroservice/currencyconversion:0.0.1-SNAPSHOT
@@ -37,10 +34,8 @@ spec:
           #              value: currency-exchange
           resources:
             requests:
-              cpu: 100m
               memory: 512Mi
             limits:
-              cpu: 500m
               memory: 1024Mi
           readinessProbe:
             httpGet:
@@ -63,13 +58,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: currency-conversion-service
-    version: 0.0.2-SNAPSHOT
-  name: currency-conversion-service
+    app: currency-conversion
+  name: currency-conversion
 spec:
   ports:
     - name: http
       port: 8282
   selector:
-    app: currency-conversion-v1
-
+    app: currency-conversion
+  type: LoadBalancer

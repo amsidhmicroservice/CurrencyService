@@ -10,13 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
 @RequiredArgsConstructor
-@RestController
 @Slf4j
+@RestController
+@RequestMapping("/currency-conversion")
 public class ConversionController {
 
     private final CurrencyExchangeService currencyExchangeService;
@@ -31,7 +33,7 @@ public class ConversionController {
 
 
     //http://35.222.88.162:8282/currency-conversion/from/USD/to/INR/quantity/100
-    @GetMapping(value = {"/currency-conversion/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
         log.info("Inside convertCurrency method of ConversionController!!!");
         Exchange exchange = currencyExchangeService.getExchange(currencyFrom, currencyTo);
