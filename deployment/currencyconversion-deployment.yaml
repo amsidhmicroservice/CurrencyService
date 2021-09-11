@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
+    version: 0.0.1-SNAPSHOT
   name: currency-conversion
   namespace: default
 spec:
@@ -20,21 +21,20 @@ spec:
     metadata:
       labels:
         app: currency-conversion
+        version: 0.0.1-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currencyconversion:0.0.2-SNAPSHOT
+        - image: amsidhmicroservice/currencyconversion:0.0.1-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
             - name: liveness-port
               containerPort: 8282
-
           resources:
             requests:
               memory: 512Mi
             limits:
               memory: 1024Mi
-
           readinessProbe:
             httpGet:
               path: /currency-conversion/
@@ -42,7 +42,6 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
             initialDelaySeconds: 60
-
           livenessProbe:
             httpGet:
               path: /currency-conversion/
@@ -56,6 +55,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: currency-conversion
+    version: 0.0.1-SNAPSHOT
   name: currency-conversion
 spec:
   ports:
@@ -63,3 +65,4 @@ spec:
       port: 8282
   selector:
     app: currency-conversion
+    version: 0.0.1-SNAPSHOT
