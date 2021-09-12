@@ -1,7 +1,15 @@
 imageName: amsidhmicroservice/currencyexchange:0.0.3-helm-SNAPSHOT
 port: 8181
-numberOfReplicas: 2
-serviceType: LoadBalancer
 name: currency-exchange
-version: 0.0.3-helm-SNAPSHOT
 healthCheck: /currency-exchange/
+serviceType: NodePort
+
+
+version: 0.0.3-helm-SNAPSHOT
+minReadySeconds: 45
+resourceRequestMemory: 512Mi
+resourceLimitsMemory: 1024Mi
+restartPolicy: Always
+terminationGracePeriodSeconds: 30
+numberOfReplicas: 2
+

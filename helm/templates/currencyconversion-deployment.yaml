@@ -8,7 +8,7 @@ metadata:
   namespace: default
 spec:
   replicas: {{.Values.numberOfReplicas}}
-  minReadySeconds: 45
+  minReadySeconds: {{.Values.minReadySeconds}}
   selector:
     matchLabels:
       app: {{.Values.name}}
@@ -32,9 +32,9 @@ spec:
               containerPort: {{.Values.port}}
           resources:
             requests:
-              memory: 512Mi
+              memory: {{.Values.resourceRequestMemory}}
             limits:
-              memory: 1024Mi
+              memory: {{.Values.resourceLimitsMemory}}
           readinessProbe:
             httpGet:
               path: {{.Values.healthCheck}}
@@ -49,8 +49,8 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
             initialDelaySeconds: 60
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
+      restartPolicy: {{.Values.Always}}
+      terminationGracePeriodSeconds: {{.Values.terminationGracePeriodSeconds}}
 ---
 apiVersion: v1
 kind: Service
