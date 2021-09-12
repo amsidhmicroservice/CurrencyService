@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT
   name: currency-conversion
   namespace: default
 spec:
@@ -21,10 +21,10 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 0.0.2-SNAPSHOT
+        version: 0.0.3-helm-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currencyconversion:0.0.2-SNAPSHOT
+        - image: amsidhmicroservice/currencyconversion:0.0.3-helm-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
@@ -57,7 +57,7 @@ kind: Service
 metadata:
   labels:
     app: currency-conversion
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT
   name: currency-conversion
 spec:
   ports:
@@ -65,5 +65,5 @@ spec:
       port: 8282
   selector:
     app: currency-conversion
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT
   type: LoadBalancer
