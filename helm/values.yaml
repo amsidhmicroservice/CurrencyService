@@ -1,0 +1,7 @@
+imageName: amsidhmicroservice/currencyexchange:0.0.3-helm-SNAPSHOT
+port: 8181
+numberOfReplicas: 2
+serviceType: LoadBalancer
+name: currency-exchange
+version: 0.0.3-helm-SNAPSHOT
+healthCheck: /currency-exchange/
