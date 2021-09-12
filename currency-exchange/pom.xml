@@ -6,7 +6,6 @@
         <groupId>com.amsidh.mvc</groupId>
         <artifactId>currency-service</artifactId>
         <version>0.0.3-helm-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <artifactId>currency-exchange</artifactId>
     <description>Currency-Exchange project for Spring Boot</description>
