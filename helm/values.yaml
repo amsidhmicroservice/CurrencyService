@@ -1,8 +1,8 @@
-imageName: amsidhmicroservice/currencyconversion:0.0.3-helm-SNAPSHOT
-port: 8282
-name: currency-conversion
-healthCheck: /currency-conversion/
-serviceType: LoadBalancer
+imageName: amsidhmicroservice/currency-exchange:0.0.3-helm-SNAPSHOT
+port: 8181
+name: currency-exchange
+healthCheck: /currency-exchange/
+#serviceType: LoadBalancer
 
 
 version: 0.0.3-helm-SNAPSHOT

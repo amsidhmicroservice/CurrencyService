@@ -24,7 +24,7 @@ spec:
         version: 0.0.3-helm-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currencyexchange:0.0.3-helm-SNAPSHOT
+        - image: amsidhmicroservice/currency-exchange:0.0.3-helm-SNAPSHOT
 #        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: Always
           name: currency-exchange

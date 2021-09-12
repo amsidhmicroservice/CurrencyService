@@ -24,12 +24,16 @@ spec:
         version: 0.0.3-helm-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currencyconversion:0.0.3-helm-SNAPSHOT
+        - image: amsidhmicroservice/currency-conversion:0.0.3-helm-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
             - name: liveness-port
               containerPort: 8282
+          env:
+            - name: CURRENCY_EXCHANGE_URL
+              value: http://currency-exchange:8181
+
           resources:
             requests:
               memory: 512Mi

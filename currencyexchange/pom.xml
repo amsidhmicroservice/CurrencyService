@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.amsidh.mvc</groupId>
-        <artifactId>currencyservice</artifactId>
+        <artifactId>currency-service</artifactId>
         <version>0.0.3-helm-SNAPSHOT</version>
+        <relativePath/>
     </parent>
-    <artifactId>currencyexchange</artifactId>
-    <name>currencyexchange</name>
+    <artifactId>currency-exchange</artifactId>
+    <name>CurrencyExchange</name>
     <description>Currency-Exchange project for Spring Boot</description>
     <properties>
         <docker.skip>false</docker.skip>
