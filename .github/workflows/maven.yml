@@ -48,7 +48,7 @@ jobs:
       - run: |-
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
-      # Deploy sample image to the GKE cluster
+      # Deploy Currency Service images to the GKE cluster
       - name: Deploy
         run: |-
           kubectl apply -f .\deployment\currencyconversion-deployment.yaml,.\deployment\currencyexchange-deployment.yaml
