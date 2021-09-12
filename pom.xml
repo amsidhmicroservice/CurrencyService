@@ -12,7 +12,6 @@
     <artifactId>currency-service</artifactId>
     <version>0.0.3-helm-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>CurrencyService</name>
     <description>Currency-Service project for Spring Boot</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -112,8 +111,8 @@
     </build>
 
     <modules>
-        <module>CurrencyExchange</module>
-        <module>CurrencyConversion</module>
+        <module>currency-exchange</module>
+        <module>currency-conversion</module>
     </modules>
 
     <profiles>
