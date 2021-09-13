@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-exchange
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT
   name: currency-exchange
   namespace: default
 spec:
@@ -21,10 +21,10 @@ spec:
     metadata:
       labels:
         app: currency-exchange
-        version: 0.0.2-SNAPSHOT
+        version: 0.0.3-helm-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currencyexchange:0.0.2-SNAPSHOT
+        - image: amsidhmicroservice/currency-exchange:0.0.3-helm-SNAPSHOT
 #        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: Always
           name: currency-exchange
@@ -58,7 +58,7 @@ kind: Service
 metadata:
   labels:
     app: currency-exchange
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT
   name: currency-exchange
 spec:
   ports:
@@ -66,4 +66,4 @@ spec:
       port: 8181
   selector:
     app: currency-exchange
-    version: 0.0.2-SNAPSHOT
+    version: 0.0.3-helm-SNAPSHOT

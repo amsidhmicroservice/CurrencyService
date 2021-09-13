@@ -2,16 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: currency-conversion
-    version: 0.0.3-helm-SNAPSHOT
-  name: currency-conversion
+    app: {{.Values.name}}
+    version: {{.Values.version}}
+  name: {{.Values.name}}
   namespace: default
 spec:
-  replicas: 2
-  minReadySeconds: 45
+  replicas: {{.Values.numberOfReplicas}}
+  minReadySeconds: {{.Values.minReadySeconds}}
   selector:
     matchLabels:
-      app: currency-conversion
+      app: {{.Values.name}}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -20,54 +20,54 @@ spec:
   template:
     metadata:
       labels:
-        app: currency-conversion
-        version: 0.0.3-helm-SNAPSHOT
+        app: {{.Values.name}}
+        version: {{.Values.version}}
     spec:
       containers:
-        - image: amsidhmicroservice/currency-conversion:0.0.3-helm-SNAPSHOT
+        - image: {{.Values.imageName}}
           imagePullPolicy: IfNotPresent
-          name: currency-conversion
+          name: {{.Values.name}}
           ports:
             - name: liveness-port
-              containerPort: 8282
+              containerPort: {{.Values.port}}
           env:
             - name: CURRENCY_EXCHANGE_URL
               value: http://currency-exchange:8181
 
           resources:
             requests:
-              memory: 512Mi
+              memory: {{.Values.resourceRequestMemory}}
             limits:
-              memory: 1024Mi
+              memory: {{.Values.resourceLimitsMemory}}
           readinessProbe:
             httpGet:
-              path: /currency-conversion/
+              path: {{.Values.healthCheck}}
               port: liveness-port
             failureThreshold: 5
             periodSeconds: 10
             initialDelaySeconds: 60
           livenessProbe:
             httpGet:
-              path: /currency-conversion/
+              path: {{.Values.healthCheck}}
               port: liveness-port
             failureThreshold: 5
             periodSeconds: 10
             initialDelaySeconds: 60
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
+      restartPolicy: {{.Values.Always}}
+      terminationGracePeriodSeconds: {{.Values.terminationGracePeriodSeconds}}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: currency-conversion
-    version: 0.0.3-helm-SNAPSHOT
-  name: currency-conversion
+    app: {{.Values.name}}
+    version: {{.Values.version}}
+  name: {{.Values.name}}
 spec:
   ports:
     - name: http
-      port: 8282
+      port: {{.Values.port}}
   selector:
-    app: currency-conversion
-    version: 0.0.3-helm-SNAPSHOT
-  type: LoadBalancer
+    app: {{.Values.name}}
+    version: {{.Values.version}}
+  type: {{.Values.serviceType}}
