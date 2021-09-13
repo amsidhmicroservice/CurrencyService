@@ -37,7 +37,8 @@ jobs:
           password: ${{secrets.DOCKER_PASSWORD}}
       - name: Build currencyservice with Maven and push to docker-hub
         run: mvn -B clean install -P build-push --file pom.xml
-
+      - name: generate sonar report of the currency-service
+        run: mvn sonar:sonar
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
