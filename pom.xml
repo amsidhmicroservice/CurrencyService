@@ -22,6 +22,13 @@
         <!--<docker.image.prefix>gcr.io/spring-cloud-deployment-323906</docker.image.prefix>-->
         <docker.image.name>${project.artifactId}</docker.image.name>
         <docker.skip>true</docker.skip>
+
+        <!-- Sonar Properties-->
+        <sonar.sources>/src/main</sonar.sources>
+        <sonar.java.libraries.empty>true</sonar.java.libraries.empty>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
+
     </properties>
     <dependencies>
         <dependency>
@@ -107,7 +114,62 @@
                     </images>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <id>prepare-and-report</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+
+                <!-- Sonar Plugins-->
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.7.0.1746</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.5</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <modules>

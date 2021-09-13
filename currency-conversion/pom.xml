@@ -10,8 +10,25 @@
     <artifactId>currency-conversion</artifactId>
     <description>Currency-Conversion project for Spring Boot</description>
     <properties>
-        <docker.skip>false</docker.skip>
+        <docker.skip>true</docker.skip>
     </properties>
     <dependencies>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
