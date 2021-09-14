@@ -1,11 +1,11 @@
-imageName: amsidhmicroservice/currency-conversion:0.0.1-SNAPSHOT
+imageName: amsidhmicroservice/currency-conversion:0.0.2-SNAPSHOT
 port: 8282
 name: currency-conversion
 healthCheck: /currency-conversion/
 serviceType: LoadBalancer  # To be uncommented for currency-conversion
 
 
-version: 0.0.1-SNAPSHOT
+version: 0.0.2-SNAPSHOT
 minReadySeconds: 45
 resourceRequestMemory: 512Mi
 resourceLimitsMemory: 1024Mi
