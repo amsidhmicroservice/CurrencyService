@@ -10,13 +10,13 @@
     </parent>
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>0.0.3-helm-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <docker.image.prefix>amsidhmicroservice</docker.image.prefix>
         <!--<docker.image.prefix>gcr.io/spring-cloud-deployment-323906</docker.image.prefix>-->
@@ -31,6 +31,7 @@
         <sonar.organization>amsidhmicroservice</sonar.organization>
 
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
