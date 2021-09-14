@@ -26,6 +26,7 @@
         <!-- Sonar Properties-->
         <sonar.projectBaseDir>.</sonar.projectBaseDir>
         <sonar.java.libraries.empty>true</sonar.java.libraries.empty>
+        <sonar.java.libraries>target</sonar.java.libraries>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
         <sonar.organization>amsidhmicroservice</sonar.organization>
