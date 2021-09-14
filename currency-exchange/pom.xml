@@ -10,7 +10,7 @@
     <artifactId>currency-exchange</artifactId>
     <description>Currency-Exchange project for Spring Boot</description>
     <properties>
-        <docker.skip>true</docker.skip>
+        <docker.skip>false</docker.skip>
     </properties>
     <dependencies>
         <dependency>
