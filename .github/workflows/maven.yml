@@ -15,7 +15,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: cluster-helm   # TODO: update to cluster name
   GKE_ZONE: us-central1-c       # TODO: update to cluster zone
-  DEPLOYMENT_NAME: currency-conversion  # TODO: update deployment name if changed in deployment.yaml
+  DEPLOYMENT_NAME: currency-service  # TODO: update deployment name if changed in deployment.yaml
   GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
 
 
@@ -26,20 +26,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 11 for currencyservice
+      - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
+
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
-      - name: Build currencyservice with Maven and push to docker-hub
+
+      - name: Docker build and push to repository
         run: mvn -B clean install -P build-push --file pom.xml
 
-      - name: generate sonar report of the currency-service
+      - name: Generate sonar report
         run: mvn sonar:sonar
 
       # Setup gcloud CLI
@@ -49,13 +51,13 @@ jobs:
           project_id: ${{ secrets.GKE_PROJECT }}
 
       # Get the GKE credentials so we can deploy to the cluster
-      - run: |-
+      - name: Get the GKE credentials
+        run: |-
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
       # Deploy Currency Service images to the GKE cluster
-      - name: Deploy
+      - name: Deployment to the GKE Cluster
         run: |-
           kubectl apply -f deployment/currencyconversion-deployment.yaml,deployment/currencyexchange-deployment.yaml
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
-          kubectl get all -o wide
+          kubectl get services -o wide
 

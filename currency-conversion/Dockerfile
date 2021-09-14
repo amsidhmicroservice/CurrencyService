@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM adoptopenjdk/openjdk11:alpine-slim
 VOLUME /tmp
 COPY /target/currency-conversion-*.jar currencyconversion.jar
 COPY src src
