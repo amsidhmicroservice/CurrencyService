@@ -41,16 +41,19 @@ public class ConversionController {
         String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
         log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
         Exchange exchange = restTemplate.getForEntity(currencyExchangeUrlFullPath, Exchange.class).getBody();
-        assert exchange != null;
-        return CurrencyConversionResponse.builder()
-                .id(exchange.getId())
-                .from(exchange.getCurrencyFrom())
-                .to(exchange.getCurrencyTo())
-                .conversionMultiple(exchange.getConversionMultiple())
+
+        CurrencyConversionResponse.CurrencyConversionResponseBuilder builder = CurrencyConversionResponse.builder()
+                .from(currencyFrom)
+                .to(currencyTo)
                 .quantity(quantity)
-                .conversionEnvironmentInfo(instanceInformationService.retrieveInstanceInfo())
+                .conversionEnvironmentInfo(instanceInformationService.retrieveInstanceInfo());
+
+
+        builder = exchange != null ? builder
+                .id(exchange.getId())
+                .conversionMultiple(exchange.getConversionMultiple())
                 .exchangeEnvironmentInfo(exchange.getExchangeEnvironmentInfo())
-                .totalCalculatedAmount(quantity.multiply(exchange.getConversionMultiple()))
-                .build();
+                .totalCalculatedAmount(quantity.multiply(exchange.getConversionMultiple())) : builder;
+        return builder.build();
     }
 }

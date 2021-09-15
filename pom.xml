@@ -22,7 +22,7 @@
         <docker.skip>true</docker.skip>
 
         <sonar.sources>.</sonar.sources>
-        <sonar.inclusions>pom.xml,/pom.xml,src/main/**</sonar.inclusions>
+        <sonar.inclusions>pom.xml,/pom.xml,src/main/**,/src/test/**</sonar.inclusions>
 
 
     </properties>
