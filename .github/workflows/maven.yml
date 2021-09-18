@@ -38,8 +38,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
+          username: "$DOCKER_USERNAME"
+          password: "$DOCKER_PASSWORD"
 
 #      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
 #        run: mvn -B clean install -P build-push,sonar --file pom.xml
@@ -47,8 +47,8 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: $GKE_SA_KEY
-          project_id: $GCLOUD_PROJECT_ID
+          service_account_key: "$GKE_SA_KEY"
+          project_id: "$GCLOUD_PROJECT_ID"
 
       # Get the GKE credentials so we can deploy to the cluster
       - name: Get the GKE credentials
