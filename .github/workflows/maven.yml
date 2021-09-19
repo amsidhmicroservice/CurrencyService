@@ -11,6 +11,12 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '30 4,17 * * *'
+env:
+  GKE_CLUSTER: spring-boot-cluster   # TODO: update to cluster name
+  GKE_ZONE: us-central1-c       # TODO: update to cluster zone
+  DEPLOYMENT_NAME: currency-service  # TODO: update deployment name if changed in deployment.yaml
+  GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+
 
 jobs:
   build:
@@ -25,6 +31,15 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+#      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
+#        run: mvn -B clean install -P build-push,sonar --file pom.xml
+
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -34,4 +49,15 @@ jobs:
 
       - name: Use gcloud CLI
         run: gcloud info
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Get the GKE credentials
+        run: |-
+          gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+      # Deploy Currency Service images to the GKE cluster
+      - name: Deployment to the GKE Cluster
+        run: |-
+          kubectl apply -f deployment/currencyconversion-deployment.yaml,deployment/currencyexchange-deployment.yaml
+          kubectl get services -o wide
 
