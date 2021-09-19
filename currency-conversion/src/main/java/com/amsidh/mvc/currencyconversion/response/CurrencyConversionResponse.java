@@ -1,12 +1,8 @@
 package com.amsidh.mvc.currencyconversion.response;
 
+import lombok.*;
+
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -15,20 +11,19 @@ import lombok.ToString;
 @ToString
 @Builder
 public class CurrencyConversionResponse {
+    private Long id;
 
-  private Long id;
+    private String from;
 
-  private String from;
+    private String to;
 
-  private String to;
+    private BigDecimal conversionMultiple;
 
-  private BigDecimal conversionMultiple;
+    private BigDecimal quantity;
 
-  private BigDecimal quantity;
+    private BigDecimal totalCalculatedAmount;
 
-  private BigDecimal totalCalculatedAmount;
+    private String exchangeEnvironmentInfo;
 
-  private String exchangeEnvironmentInfo;
-
-  private String conversionEnvironmentInfo;
+    private String conversionEnvironmentInfo;
 }

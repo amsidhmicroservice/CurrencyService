@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - image: amsidhmicroservice/currency-exchange:0.0.3-SNAPSHOT
-          #        - image: gcr.io/microservice-324508/currencyexchange:latest
+#        - image: gcr.io/microservice-324508/currencyexchange:latest
           imagePullPolicy: Always
           name: currency-exchange
           ports:

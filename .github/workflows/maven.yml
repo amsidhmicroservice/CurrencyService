@@ -10,7 +10,7 @@ on:
     branches: [ master ]
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: '30 4,17 * * *'
+    - cron:  '30 4,17 * * *'
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}

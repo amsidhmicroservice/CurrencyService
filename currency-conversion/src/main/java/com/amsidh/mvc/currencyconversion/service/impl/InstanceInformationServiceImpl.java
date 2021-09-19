@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class InstanceInformationServiceImpl implements InstanceInformationService {
 
-  private static final String HOST_NAME = "HOSTNAME";
+    private static final String HOST_NAME = "HOSTNAME";
 
-  @Value("${" + HOST_NAME + ":local}")
-  private String nodeName;
+    @Value("${" + HOST_NAME + ":local}")
+    private String nodeName;
 
-  @Value("${info.app.version:NoVersion}")
-  private String projectVersion;
+    @Value("${info.app.version:NoVersion}")
+    private String projectVersion;
 
-  @Override
-  public String retrieveInstanceInfo() {
-    log.info("Inside retrieveInstanceInfo method of InstanceInformationService");
-    return projectVersion + " : " + nodeName;
-  }
+    @Override
+    public String retrieveInstanceInfo() {
+        log.info("Inside retrieveInstanceInfo method of InstanceInformationService");
+        return projectVersion + " : " + nodeName;
+    }
 }
