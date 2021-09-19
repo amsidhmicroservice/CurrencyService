@@ -38,14 +38,14 @@ jobs:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
 
-      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
-        run: mvn -B clean install -P build-push,sonar --file pom.xml
+#      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
+#        run: mvn -B clean install -P build-push,sonar --file pom.xml
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${{ secrets.GKE_SA_KEY }}
-          project_id: ${{ secrets.GKE_PROJECT }}
+          service_account_key: b01b31e6bc5c97262509aaeea66727420ef3f777
+          project_id: spring-boot-project-326413
 
       # Get the GKE credentials so we can deploy to the cluster
       - name: Get the GKE credentials
