@@ -44,7 +44,7 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: b01b31e6bc5c97262509aaeea66727420ef3f777
+          service_account_key: amsidhcdcds
           project_id: spring-boot-project-326413
 
       # Get the GKE credentials so we can deploy to the cluster
