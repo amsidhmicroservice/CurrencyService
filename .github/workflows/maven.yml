@@ -28,6 +28,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Echo all constants parameter refered here
+        run: |-
+          echo "GKE_SA_KEY = ${{ env.GKE_SA_KEY }}"
+          echo "GCLOUD_PROJECT_ID = $env.GCLOUD_PROJECT_ID"
+
       - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
