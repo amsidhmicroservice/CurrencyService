@@ -47,8 +47,8 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${env.GKE_SA_KEY}
-          project_id: ${env.GCLOUD_PROJECT_ID}
+          service_account_key: ${{ env.GKE_SA_KEY}}
+          project_id: ${{env.GCLOUD_PROJECT_ID}}
 
       # Get the GKE credentials so we can deploy to the cluster
       - name: Get the GKE credentials
