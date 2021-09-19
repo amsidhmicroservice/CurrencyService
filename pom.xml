@@ -96,6 +96,7 @@
     </modules>
 
     <profiles>
+
         <profile>
             <id>build-push</id>
             <activation>
@@ -149,6 +150,7 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>sonar</id>
             <activation>
@@ -220,5 +222,6 @@
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 </project>
