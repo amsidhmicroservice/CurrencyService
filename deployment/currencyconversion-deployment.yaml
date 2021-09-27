@@ -70,4 +70,3 @@ spec:
   selector:
     app: currency-conversion
     version: 0.0.3-SNAPSHOT
-  type: LoadBalancer
