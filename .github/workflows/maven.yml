@@ -11,8 +11,8 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '30 4,17 * * *'
-env:
 
+env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
   GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
