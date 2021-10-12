@@ -2,7 +2,7 @@ imageName: amsidhmicroservice/currency-conversion:0.0.3-SNAPSHOT
 port: 8282
 name: currency-conversion
 healthCheck: /currency-conversion/
-serviceType: LoadBalancer  # To be uncommented for currency-conversion
+serviceType: NodePort  # To be uncommented for currency-conversion
 
 
 version: 0.0.3-SNAPSHOT
