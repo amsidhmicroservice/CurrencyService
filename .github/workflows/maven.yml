@@ -64,5 +64,8 @@ jobs:
       # Deploy Currency Service images to the GKE cluster
       - name: Deployment to the GKE Cluster
         run: |-
-          kubectl apply -f deployment/currencyconversion-deployment.yaml,deployment/currencyexchange-deployment.yaml,deployment/rbac.yaml
+          kubectl delete -f deployment/currencyconversion-deployment.yaml,deployment/currencyexchange-deployment.yaml,deployment/rbac.yaml,deployment/istio-gateway.yaml
+          kubectl get namespaces
+          kubectl apply -f deployment/currencyconversion-deployment.yaml,deployment/currencyexchange-deployment.yaml,deployment/rbac.yaml,deployment/istio-gateway.yaml
           kubectl get services -o wide
+
