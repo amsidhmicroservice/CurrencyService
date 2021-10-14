@@ -31,6 +31,7 @@ public class ExchangeController {
         log.info("Inside getCurrencyExchange method of ExchangeRepository");
         Exchange exchange = exchangeRepository.findExchangeByCurrencyFromAndCurrencyTo(currencyFrom, currencyTo);
         exchange.setExchangeEnvironmentInfo(instanceInformationService.retrieveInstanceInfo());
+        log.info("Returning the response from currency-conversion service");
         return exchange;
     }
 
