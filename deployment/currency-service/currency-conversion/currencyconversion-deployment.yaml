@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 0.0.1-logsinjson-SNAPSHOT
+    version: 1.1.0-SNAPSHOT
   name: currency-conversion
   namespace: default
 spec:
@@ -21,14 +21,14 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 0.0.1-logsinjson-SNAPSHOT
+        version: 1.1.0-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currency-conversion:0.0.1-logsinjson-SNAPSHOT
+        - image: amsidhmicroservice/currency-conversion:1.1.0-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
-            - name: liveness-port
+            - name: conversionport
               containerPort: 8282
           env:
             - name: CURRENCY_EXCHANGE_URL
@@ -39,19 +39,5 @@ spec:
               memory: 512Mi
             limits:
               memory: 1024Mi
-          readinessProbe:
-            httpGet:
-              path: /currency-conversion/
-              port: liveness-port
-            failureThreshold: 5
-            periodSeconds: 10
-            initialDelaySeconds: 60
-          livenessProbe:
-            httpGet:
-              path: /currency-conversion/
-              port: liveness-port
-            failureThreshold: 5
-            periodSeconds: 10
-            initialDelaySeconds: 60
       restartPolicy: Always
       terminationGracePeriodSeconds: 30

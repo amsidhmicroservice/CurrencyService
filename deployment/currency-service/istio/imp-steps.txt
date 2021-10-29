@@ -1,0 +1,16 @@
+Download Istio istio-1.11.3
+
+cd istio-1.11.3
+export PATH=$PWD/bin:$PATH
+istioctl install --set profile=demo -y
+kubectl label namespace default istio-injection=enabled
+
+kubectl apply -f samples/addons
+kubectl rollout status deployment/kiali -n istio-system
+istioctl dashboard kiali
+
+kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml   --> You can skip this step and deploy your own application
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml   --> You can have your own gateway configuration yaml file
+istioctl analyze
+kubectl get svc istio-ingressgateway -n istio-system
+

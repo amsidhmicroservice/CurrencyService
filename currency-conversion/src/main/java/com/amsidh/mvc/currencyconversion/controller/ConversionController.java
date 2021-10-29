@@ -30,7 +30,7 @@ public class ConversionController {
     @GetMapping("/")
     public String healthCheck() {
         log.info("=======================================Start Request================================================");
-        log.debug("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
+        log.info("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
         log.info("=======================================End Request================================================");
         return "{status:up}";
     }

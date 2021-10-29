@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>0.0.1-logsinjson-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
     <properties>
