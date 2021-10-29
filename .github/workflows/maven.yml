@@ -64,36 +64,15 @@ jobs:
       # Deploy Currency Service images to the GKE cluster
       - name: Deployment to the GKE Cluster
         run: |-
-          echo "Delete exiting EFK setup"
-          kubectl delete namespace elastic-kibana --ignore-not-found=true --grace-period=10
-
-          echo "Setup EFK on GKE cluster"
-          kubectl apply -f deployment/efk/elasticsearch-kibana/1-elastic-kibana-namespace.yaml,deployment/efk/elasticsearch-kibana/2-elastic-demo.yaml,deployment/efk/elasticsearch-kibana/3-kibana-demo.yaml
-          kubectl get all -n elastic-kibana
-
-
-          echo "Delete existing FluentD Setup"
-          kubectl delete namespace fluentd --ignore-not-found=true --grace-period=10
-
-          echo "Setup FluentD on GKE cluster"
-          kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
-          kubectl get all -n fluentd
-
           echo "Delete ISTIO Setup"
           kubectl delete namespace istio-system --ignore-not-found=true --grace-period=10
 
           echo "Setup ISTIO on GKE cluster"
-          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -
-          cd istio-1.6.8
+          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.4 TARGET_ARCH=x86_64 sh -
+          cd istio-1.6.4
           export PATH=$PWD/bin:$PATH
           istioctl install --set profile=demo -y
           kubectl label namespace default istio-injection=enabled
           kubectl get all -n istio-system
 
-          echo "Delete Currency-Service Setup"
-          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/currency-service,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
-          echo "Setup Currency-Service on GKE cluster"
-          kubectl get namespaces
-          kubectl apply -f -f deployment/currency-service,deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
-          kubectl get services -o wide
 
