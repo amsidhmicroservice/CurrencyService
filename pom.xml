@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
     <properties>
@@ -58,6 +58,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Log Message in Json-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>

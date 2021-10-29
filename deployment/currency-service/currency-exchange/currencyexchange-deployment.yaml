@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: currency-exchange
+    version: 1.1.0-SNAPSHOT
+  name: currency-exchange
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: currency-exchange
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: currency-exchange
+        version: 1.1.0-SNAPSHOT
+    spec:
+      containers:
+        - image: amsidhmicroservice/currency-exchange:1.1.0-SNAPSHOT
+          imagePullPolicy: Always
+          name: currency-exchange
+          ports:
+            - name: exchange-port
+              containerPort: 8181
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 1024Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

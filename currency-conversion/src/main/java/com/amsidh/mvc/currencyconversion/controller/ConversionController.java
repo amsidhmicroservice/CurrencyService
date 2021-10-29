@@ -29,7 +29,9 @@ public class ConversionController {
 
     @GetMapping("/")
     public String healthCheck() {
-        //log.debug("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
+        log.info("=======================================Start Request================================================");
+        log.info("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
+        log.info("=======================================End Request================================================");
         return "{status:up}";
     }
 
@@ -37,6 +39,7 @@ public class ConversionController {
     //http://35.222.88.162:8282/currency-conversion/from/USD/to/INR/quantity/100
     @GetMapping(value = {"/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
+        log.info("=======================================Start Request================================================");
         log.info("Inside convertCurrency method of ConversionController!!!");
         String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
         log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
@@ -54,6 +57,7 @@ public class ConversionController {
                 .conversionMultiple(exchange.getConversionMultiple())
                 .exchangeEnvironmentInfo(exchange.getExchangeEnvironmentInfo())
                 .totalCalculatedAmount(quantity.multiply(exchange.getConversionMultiple())) : builder;
+        log.info("=======================================End Request================================================");
         return builder.build();
     }
 }

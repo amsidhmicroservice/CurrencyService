@@ -1,0 +1,15 @@
+# CurrencyConversion-Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: currency-conversion
+    version: 1.1.0-SNAPSHOT
+  name: currency-conversion
+spec:
+  ports:
+    - name: conversionport
+      port: 8282
+  selector:
+    app: currency-conversion
+    version: 1.1.0-SNAPSHOT

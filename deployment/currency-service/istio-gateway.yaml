@@ -7,8 +7,8 @@ spec:
     istio: ingressgateway
   servers:
     - port:
+        name: ingressgateway-port
         number: 80
-        name: http
         protocol: HTTP
       hosts:
         - "*"
@@ -26,8 +26,6 @@ spec:
     - match:
         - uri:
             prefix: /currency-conversion
-        - uri:
-            prefix: /
       route:
         - destination:
             host: currency-conversion
