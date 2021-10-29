@@ -1,0 +1,15 @@
+#CurrencyExchange Service Configuration
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: currency-exchange
+    version: 0.0.1-logsinjson-SNAPSHOT
+  name: currency-exchange
+spec:
+  ports:
+    - name: http
+      port: 8181
+  selector:
+    app: currency-exchange
+    version: 0.0.1-logsinjson-SNAPSHOT
