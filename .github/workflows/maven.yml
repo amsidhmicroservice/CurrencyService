@@ -43,8 +43,8 @@ jobs:
           username: ${{env.DOCKER_USERNAME}}
           password: ${{env.DOCKER_PASSWORD}}
 
-      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
-        run: mvn -B clean install -P build-push,sonar --file pom.xml
+#      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
+#        run: mvn -B clean install -P build-push,sonar --file pom.xml
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
@@ -76,7 +76,7 @@ jobs:
           kubectl delete namespace fluentd --ignore-not-found=true --grace-period=10
 
           echo "Setup FluentD on GKE cluster"
-          kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml,deployment/efk/fluentd/5-counter.yaml
+          kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
           kubectl get all -n fluentd
 
           echo "Delete ISTIO Setup"
@@ -91,9 +91,9 @@ jobs:
           kubectl get all -n istio-system
 
           echo "Delete Currency-Service Setup"
-          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/currency-service --ignore-not-found=true --grace-period=10
+          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/currency-service,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
           echo "Setup Currency-Service on GKE cluster"
           kubectl get namespaces
-          kubectl apply -f -f deployment/currency-service,deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion
+          kubectl apply -f -f deployment/currency-service,deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
           kubectl get services -o wide
 
