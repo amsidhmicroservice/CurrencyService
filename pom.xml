@@ -43,6 +43,12 @@
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
 
+        <!-- This kubernetes-all library is optional. This will help you to print all available kubernetes object in log during deployment-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-kubernetes-all</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

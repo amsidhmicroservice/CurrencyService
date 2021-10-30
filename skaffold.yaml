@@ -15,5 +15,5 @@ deploy:
     manifests:
     - deployment/currencyconversion-deployment.yaml
     - deployment/currencyexchange-deployment.yaml
-    - deployment/istio-gateway.yaml
+    - deployment/ingress-gateway.yaml
     - deployment/rbac.yml
