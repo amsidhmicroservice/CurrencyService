@@ -1,4 +1,4 @@
-name: Istio Setup Setup on GKE Cluster
+name: 2- Istio Setup Setup on GKE Cluster
 on:
   workflow_dispatch:
     inputs:

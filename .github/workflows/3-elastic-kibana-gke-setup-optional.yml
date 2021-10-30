@@ -1,4 +1,4 @@
-name: Elastic-Fluentd-Kibana Setup on GKE Cluster
+name: 3- Elastic-Fluentd-Kibana Setup on GKE Cluster
 on:
   workflow_dispatch:
     inputs:
