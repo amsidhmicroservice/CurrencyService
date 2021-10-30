@@ -1,5 +1,6 @@
 package com.amsidh.mvc.currencyexchange.service.impl;
 
+import com.amsidh.mvc.currencyexchange.exception.MyCustomException;
 import com.amsidh.mvc.currencyexchange.service.InstanceInformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,5 +22,12 @@ public class InstanceInformationServiceImpl implements InstanceInformationServic
     public String retrieveInstanceInfo() {
         log.debug("Inside retrieveInstanceInfo method of InstanceInformationService in currency-exchange service " + projectVersion + " : " + nodeName);
         return projectVersion + " : " + nodeName;
+    }
+
+    @Override
+    public String throwException() throws MyCustomException {
+        MyCustomException myCustomException= new MyCustomException("Manually throwing exception");
+        log.error("Error==>", myCustomException);
+        throw myCustomException;
     }
 }
