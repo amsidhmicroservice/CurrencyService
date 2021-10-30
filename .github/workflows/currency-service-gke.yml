@@ -1,12 +1,7 @@
 name: Currency-Service Deployment on GKE Cluster
 on:
-  push:
-    branches: [ master, demo-shown-ybl, log-format-in-json, elk-without-istio ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron: '30 4,17 * * *'
+  workflow_dispatch:
+    inputs:
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
