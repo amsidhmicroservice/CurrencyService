@@ -5,7 +5,7 @@ name: CurrencyService Build And Push to Docker Hub
 
 on:
   push:
-    branches: [ * ]
+    branches: [ master, elk-without-istio ]
   pull_request:
     branches: [ master ]
   schedule:
