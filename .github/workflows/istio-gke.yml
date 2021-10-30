@@ -1,4 +1,4 @@
-name: Elastic-Kibana Setup on GKE Cluster
+name: Istio Setup Setup on GKE Cluster
 on:
   workflow_dispatch:
     inputs:
