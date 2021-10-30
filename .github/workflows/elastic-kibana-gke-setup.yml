@@ -1,7 +1,15 @@
-name: Elastic-Kibana Setup on GKE Cluster
+name: Elastic-Fluentd-Kibana Setup on GKE Cluster
 on:
   workflow_dispatch:
     inputs:
+      name:
+        description: 'Run this workflow if you are really looking to install EFK'
+        required: true
+        default: 'This workflow install Fluentd, Elastic-search and Kibana'
+      home:
+        description: 'Pune'
+        required: false
+        default: 'Maharashtra'
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -14,6 +22,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          echo "Hello ${{ github.event.inputs.name }}!"
+          echo "- in ${{ github.event.inputs.home }}!"
+
       # Install gcloud on this Git Ubuntu temporary server
       - uses: google-github-actions/setup-gcloud@master
         with:

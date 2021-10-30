@@ -5,7 +5,7 @@ name: CurrencyService Build And Push to Docker Hub
 
 on:
   push:
-    branches: [ master, demo-shown-ybl, log-format-in-json, elk-without-istio ]
+    branches: [ * ]
   pull_request:
     branches: [ master ]
   schedule:

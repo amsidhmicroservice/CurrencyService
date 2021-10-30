@@ -1,7 +1,22 @@
 name: Currency-Service Deployment on GKE Cluster
 on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '30 4,17 * * *'
   workflow_dispatch:
     inputs:
+      name:
+        description: 'Run this workflow Will deploy Currency-Service on GKE manually triggered'
+        required: false
+        default: 'This workflow install Currency-Service'
+      home:
+        description: 'Pune'
+        required: false
+        default: 'Maharashtra'
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -14,6 +29,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          echo "Hello ${{ github.event.inputs.name }}!"
+          echo "- in ${{ github.event.inputs.home }}!"
+
       # Install gcloud on this Git Ubuntu temporary server
       - uses: google-github-actions/setup-gcloud@master
         with:
