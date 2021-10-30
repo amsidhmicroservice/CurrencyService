@@ -1,4 +1,4 @@
-name: Currency-Service Deployment on GKE Cluster
+name: Deploy Currency-Service to the GKE Cluster
 on:
   push:
     branches: [ master ]
