@@ -2,12 +2,6 @@ name: Elastic-Kibana Setup on GKE Cluster
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: "Log Level"
-        required: true
-        default: "warning"
-    tags:
-      description: "workflow manually trigger"
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
