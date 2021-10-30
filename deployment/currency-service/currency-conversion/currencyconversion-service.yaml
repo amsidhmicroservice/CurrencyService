@@ -14,4 +14,4 @@ spec:
     app: currency-conversion
     version: 1.1.0-SNAPSHOT
   sessionAffinity: ClientIP
-  type: LoadBalancer
+  type: NodePort
