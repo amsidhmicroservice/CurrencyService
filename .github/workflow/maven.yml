@@ -90,11 +90,26 @@ jobs:
           kubectl label namespace default istio-injection=enabled --overwrite=true
           kubectl get all -n istio-system
 
+          pwd
+          echo "Change the directory back to installation file"
+          cd ..
+          pwd
+          ls -al
+
           echo "Delete Currency-Service Setup"
-          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/currency-service,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
+          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
           echo "Setup Currency-Service on GKE cluster"
 
           kubectl get namespaces
-          kubectl apply -f -f deployment/currency-service,deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
+          kubectl apply -f deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
           kubectl get services -o wide
+
+          echo "Delete Gateway"
+          kubectl delete -f deployment/gateway/istio --ignore-not-found=true --grace-period=10
+
+          echo "Install Istio Gateway"
+          kubectl apply -f deployment/gateway/istio
+          kubectl get gateway -o wide
+
+
 
