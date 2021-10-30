@@ -5,9 +5,9 @@ name: currencyservice-github-action
 
 on:
   push:
-    branches: [ master, demo-shown-ybl, log-format-in-json ]
+    branches: [ master, demo-shown-ybl, log-format-in-json,elk-without-istio ]
   pull_request:
-    branches: [ master, demo-shown-ybl, log-format-in-json ]
+    branches: [ master, demo-shown-ybl, log-format-in-json,elk-without-istio ]
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '30 4,17 * * *'
