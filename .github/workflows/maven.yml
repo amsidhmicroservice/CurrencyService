@@ -11,6 +11,7 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '30 17 * * *'
+  workflow_dispatch:
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
