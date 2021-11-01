@@ -44,8 +44,18 @@ jobs:
           username: ${{env.DOCKER_USERNAME}}
           password: ${{env.DOCKER_PASSWORD}}
 
-      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
-        run: mvn -B clean install -P build-push,sonar --file pom.xml
+      - name: Maven Clean, Install, Docker Build, Push to Docker
+        run: mvn -B clean install -P build-push --file pom.xml
+  sonar_analysis:
+    name: sonar_analysis
+    runs-on: ubuntu-latest
+    needs: [ build_clean_install_push ]
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: SonarCloud Push
+        run: mvn sonar:sonar -P sonar --file pom.xml
+
   deploy_istio:
     name: deploy_istio
     runs-on: ubuntu-latest
