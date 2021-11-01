@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    # * is a special character in YAML so you have to quote this string
+    # * is a special character in YAML, so you have to quote this string
     - cron: '30 17 * * *'
   workflow_dispatch:
 
@@ -26,13 +26,13 @@ env:
 
 jobs:
   build:
-
+    name: build currency service with maven
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+      - name: Setup Java 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
@@ -46,40 +46,74 @@ jobs:
 
       - name: Maven Clean, Install, Docker Build, Push and SonarCloud
         run: mvn -B clean install -P build-push,sonar --file pom.xml
-
-      # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@master
+  deploy_ek_on_gke:
+    name: Install GCloud and Login to your GCloud Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
-
-      - name: Use gcloud CLI
-        run: gcloud info
-
-      # Get the GKE credentials so we can deploy to the cluster
-      - name: Get the GKE credentials
+      - name: Access GKE Cluster
         run: |-
+          echo "Display GCP account details"
+          gcloud info
+          echo "Access to GKE Cluster"
           gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
 
-      # Deploy Currency Service images to the GKE cluster
-      - name: Deployment to the GKE Cluster
+      - name: Deployment ElasticSearch And Kiabana to the GKE Cluster
         run: |-
-          echo "Delete exiting EFK setup"
+          echo "Delete exiting ElasticSearch And Kibana deployment"
           kubectl delete namespace elastic-kibana --ignore-not-found=true --grace-period=10
 
-          echo "Setup EFK on GKE cluster"
+          echo "Deploy ElasticSearch And Kibana on GKE cluster"
           kubectl apply -f deployment/efk/elasticsearch-kibana/1-elastic-kibana-namespace.yaml,deployment/efk/elasticsearch-kibana/2-elastic-demo.yaml,deployment/efk/elasticsearch-kibana/3-kibana-demo.yaml
           kubectl get all -n elastic-kibana
 
+  deploy_fluentd:
+    name: Install GCloud and Login to your GCloud Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
 
+      # Deploy Currency Service images to the GKE cluster
+      - name: Deployment to the FluentD Cluster
+        run: |-
           echo "Delete existing FluentD Setup"
           kubectl delete namespace fluentd --ignore-not-found=true --grace-period=10
 
           echo "Setup FluentD on GKE cluster"
           kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
           kubectl get all -n fluentd
+  deploy_istio:
+    name: Install GCloud and Login to your GCloud Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
 
+      # Deploy Currency Service images to the GKE cluster
+      - name: Deployment of the ISTIO to GKE Cluster
+        run: |-
           echo "Delete ISTIO Setup"
           kubectl delete namespace istio-system --ignore-not-found=true --grace-period=10
 
@@ -91,24 +125,36 @@ jobs:
           kubectl label namespace default istio-injection=enabled --overwrite=true
           kubectl get all -n istio-system
 
-          pwd
-          echo "Change the directory back to installation file"
-          cd ..
-          pwd
-          ls -al
-
+  deploy_currency_servide:
+    name: Install GCloud and Login to your GCloud Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+      - name: Delete existing Currency-Service if present on GKE Cluster
+        run: |-
           echo "Delete Currency-Service Setup"
           kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
-          echo "Setup Currency-Service on GKE cluster"
-
-          kubectl get namespaces
-          kubectl apply -f deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
-          kubectl get services -o wide
 
           echo "Delete Gateway"
           kubectl delete -f deployment/gateway/istio --ignore-not-found=true --grace-period=10
 
+      - name: Deploy Currency-Service on GKE Cluster
+        run: |-
+          kubectl get namespaces
+          kubectl apply -f deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
+          kubectl get services -o wide
+
           echo "Install Istio Gateway"
           kubectl apply -f deployment/gateway/istio
           kubectl get gateway -o wide
-
