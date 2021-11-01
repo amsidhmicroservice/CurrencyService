@@ -16,8 +16,8 @@
                     <pattern>
                         <omitEmptyFields>true</omitEmptyFields>
                         {
-                        "request-tracking": {
                         "correlationId": "%mdc{traceId}",
+                        "request-tracking": {
                         "span_id": "%mdc{spanId}",
                         "parent_span_id": "%mdc{X-B3-ParentSpanId}",
                         "exported": "%mdc{spanExportable}"
