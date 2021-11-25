@@ -42,6 +42,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
+        <!-- Log Message in Json -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.6</version>
+        </dependency>
 
         <!-- This kubernetes-all library is optional. This will help you to print all available kubernetes object in log during deployment-->
         <dependency>
@@ -67,12 +73,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Log Message in Json-->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>6.6</version>
-        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
