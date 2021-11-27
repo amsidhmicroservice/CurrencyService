@@ -10,8 +10,6 @@ data:
     ################################################################
     # This source gets all logs from local docker host
     @include pods-kind-fluent.conf
-    #@include pods-fluent.conf
-    #@include file-fluent.conf
     @include elastic-fluent.conf
   pods-kind-fluent.conf: |-
     <source>
@@ -20,57 +18,29 @@ data:
       tag kubernetes.*
       path /var/log/containers/*.log
       pos_file /var/log/fluentd-containers.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/prometheus*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/pdcsi*" ]
+      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd*", "/var/log/containers/*_istio-*"]
       <parse>
         @type regexp
         #https://regex101.com/r/ZkOBTI/1
-        expression ^(?<time>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.[^Z]*Z)\s(?<stream>[^\s]+)\s(?<character>[^\s])\s(?<message>.*)$
+        expression ^(?<time>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.[^Z]*Z)\s(?<stream>[^\s]+)\s(?<character>[^\s])\s(?<log>.*)$
         #time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
 
     <filter kubernetes.**>
-      @type kubernetes_metadata
-      @id filter_kube_metadata
-      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
-      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
-      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
-      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
-      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
-      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
-      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
-    </filter>
-  pods-fluent.conf: |-
-    <source>
-      @type tail
-      read_from_head true
-      tag kubernetes.*
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/prometheus*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/pdcsi*" ]
+      @type parser
+      key_name "$.log"
+      hash_value_field "log"
+      reserve_data true
       <parse>
-        @type kubernetes
-        @type "#{ENV['FLUENT_CONTAINER_TAIL_PARSER_TYPE'] || 'json'}"
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type json
       </parse>
-    </source>
+    </filter>
 
     <filter kubernetes.**>
       @type kubernetes_metadata
-      @id filter_kube_metadata
-      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
-      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
-      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
-      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
-      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
-      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
-      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
     </filter>
-  file-fluent.conf: |-
-    <match **>
-      @type file
-      path /tmp/file-test.log
-    </match>
+
   elastic-fluent.conf: |-
     <match **>
       @type elasticsearch_dynamic

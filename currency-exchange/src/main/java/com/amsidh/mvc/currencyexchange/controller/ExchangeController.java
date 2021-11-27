@@ -20,14 +20,6 @@ public class ExchangeController {
     private final ExchangeRepository exchangeRepository;
     private final InstanceInformationService instanceInformationService;
 
-    @GetMapping("/")
-    public String healthCheck() {
-        log.info("=======Start Request=======");
-        log.debug("healthCheck method of ExchangeController on host " + instanceInformationService.retrieveInstanceInfo());
-        log.info("=======End Request=======");
-        return "{status:up}";
-    }
-
     //http://34.121.35.177:8181/currency-exchange/USD/to/INR
     @GetMapping(value = "/{currencyFrom}/to/{currencyTo}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Exchange getCurrencyExchange(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo) {
@@ -40,9 +32,11 @@ public class ExchangeController {
         return exchange;
     }
 
-
     @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String throwException(){
+        log.info("Testing Info Message");
+        log.warn("Testing Warn Message");
+        log.debug("Testing Debug Message");
         instanceInformationService.throwException();
         return "This message won't return to the caller as it throws exception in the service method call";
     }

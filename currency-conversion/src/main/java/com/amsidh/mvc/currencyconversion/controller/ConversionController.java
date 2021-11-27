@@ -27,15 +27,6 @@ public class ConversionController {
     @Value("${CURRENCY_EXCHANGE_URL:http://localhost:8181}")
     public String currencyExchangeUrl;
 
-    @GetMapping("/")
-    public String healthCheck() {
-        log.info("=======================================Start Request================================================");
-        log.info("healthCheck method of ConversionController on host " + instanceInformationService.retrieveInstanceInfo());
-        log.info("=======================================End Request================================================");
-        return "{status:up}";
-    }
-
-
     //http://35.222.88.162:8282/currency-conversion/from/USD/to/INR/quantity/100
     @GetMapping(value = {"/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {

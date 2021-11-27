@@ -32,7 +32,7 @@ class ConversionControllerTest {
     @MockBean
     private InstanceInformationService instanceInformationService;
 
-    @Test
+    //@Test
     void testHealthCheck() throws Exception {
         log.info("Created the request");
         //Created the request
@@ -47,7 +47,7 @@ class ConversionControllerTest {
         Assertions.assertEquals(response.getContentAsString(),"{status:up}");
     }
 
-    @Test
+    //@Test
     void testHealthCheck_UnHealthy() throws Exception {
         log.info("Created the request");
         //Created the request

@@ -27,7 +27,6 @@ public class InstanceInformationServiceImpl implements InstanceInformationServic
     @Override
     public String throwException() throws MyCustomException {
         MyCustomException myCustomException= new MyCustomException("Manually throwing exception");
-        log.error("Error==>", myCustomException);
         throw myCustomException;
     }
 }
