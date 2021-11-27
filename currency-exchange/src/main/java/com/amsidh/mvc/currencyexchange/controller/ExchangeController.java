@@ -32,4 +32,11 @@ public class ExchangeController {
         return exchange;
     }
 
+    @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public String throwException(){
+
+        instanceInformationService.throwException();
+        return "This message won't return to the caller as it throws exception in the service method call";
+    }
+
 }
