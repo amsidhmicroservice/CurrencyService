@@ -28,6 +28,11 @@ data:
     </source>
 
     <filter kubernetes.**>
+      @type record_transformer
+      remove_keys stream,character
+    </filter>
+
+    <filter kubernetes.**>
       @type kubernetes_metadata
       @id filter_kube_metadata
       kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
