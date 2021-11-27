@@ -34,7 +34,9 @@ public class ExchangeController {
 
     @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String throwException(){
-
+        log.info("Testing Info Message");
+        log.warn("Testing Warn Message");
+        log.debug("Testing Debug Message");
         instanceInformationService.throwException();
         return "This message won't return to the caller as it throws exception in the service method call";
     }
