@@ -16,9 +16,9 @@ data:
       @type tail
       read_from_head true
       tag kubernetes.*
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd*", "/var/log/containers/*_istio-*"]
+      path /var/log/containers/currency-conversion-*.log,/var/log/containers/currency-exchange-*.log,/var/log/containers/counter_default_count-*.log
+      pos_file /var/log/fluentd-containers-currency.log.pos
+      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
       <parse>
         @type regexp
         #https://regex101.com/r/ZkOBTI/1
@@ -46,6 +46,7 @@ data:
       @type elasticsearch_dynamic
       @log_level info
       include_tag_key true
+      flush_thread_count 10
       host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
       reload_connections true
