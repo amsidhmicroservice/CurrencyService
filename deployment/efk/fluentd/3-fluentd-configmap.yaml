@@ -27,7 +27,7 @@ data:
         @type multi_format
         <pattern>
           format json
-          time_key time
+          time_key logTime
           time_format %Y-%m-%dT%H:%M:%S.%NZ
         </pattern>
         <pattern>
@@ -35,6 +35,15 @@ data:
         </pattern>
       </parse>
     </source>
+    
+    <filter kubernetes.**>
+      @type parser # record_transformer
+      # @log_level debug
+      <parse>
+        @type json
+      </parse>
+      key_name log
+    </filter>
     
     <filter kubernetes.**>
       @type kubernetes_metadata
