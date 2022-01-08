@@ -8,48 +8,71 @@ metadata:
 data:
   fluent.conf: |-
     ################################################################
-    # This source gets all logs from local docker host
-    @include pods-kind-fluent.conf
-    @include elastic-fluent.conf
-  pods-kind-fluent.conf: |-
+    <label @FLUENT_LOG>
+      <match fluent.**>
+        @type null
+      </match>
+    </label>
+    
     <source>
       @type tail
-      read_from_head true
-      tag kubernetes.*
       path /var/log/containers/currency-conversion-*.log,/var/log/containers/currency-exchange-*.log,/var/log/containers/counter_default_count-*.log
       pos_file /var/log/fluentd-containers-currency.log.pos
       exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
+      tag kubernetes.*
+      refresh_interval 30
+      read_from_head true
+      emit_unmatched_lines true
       <parse>
-        @type regexp
-        #https://regex101.com/r/ZkOBTI/1
-        expression ^(?<time>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.[^Z]*Z)\s(?<stream>[^\s]+)\s(?<character>[^\s])\s(?<log>.*)$
-        #time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format none
+        </pattern>
       </parse>
     </source>
-
-    <filter kubernetes.**>
-      @type parser
-      key_name "$.log"
-      hash_value_field "log"
-      reserve_data true
-      <parse>
-        @type json
-      </parse>
-    </filter>
-
+    
     <filter kubernetes.**>
       @type kubernetes_metadata
+      verify_ssl false
     </filter>
-
-  elastic-fluent.conf: |-
-    <match **>
+    
+    <match kubernetes.**>
       @type elasticsearch_dynamic
       @log_level info
       include_tag_key true
-      flush_thread_count 10
       host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
-      reload_connections true
+      suppress_type_name true
       logstash_format true
       logstash_prefix ${record['kubernetes']['pod_name']}
+      buffer_chunk_limit 2M
+      reload_connections true
+      reconnect_on_error true
+      max_retry_wait 30
+      disable_retry_limit
+    </match>
+    <match **>
+      @type elasticsearch
+      @log_level info
+      include_tag_key true
+      host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
+      port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
+      suppress_type_name true
+      logstash_format true
+      # Set the chunk limits.
+      buffer_chunk_limit 2M
+      buffer_queue_limit 8
+      # Never wait longer than 5 minutes between retries.
+      max_retry_wait 30
+      # Disable the limit on the number of retries (retry forever).
+      disable_retry_limit
+      # Use multiple threads for processing.
+      num_threads 5
+      reload_connections true
+      reconnect_on_error true
     </match>
