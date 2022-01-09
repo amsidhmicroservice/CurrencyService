@@ -59,7 +59,7 @@ data:
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
       suppress_type_name true
       logstash_format true
-      logstash_prefix ${record['kubernetes']['container_name']}
+      logstash_prefix ms-log-${record['kubernetes']['container_name']}
       buffer_chunk_limit 2M
       reload_connections true
       reconnect_on_error true
