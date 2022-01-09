@@ -11,7 +11,24 @@
     <description>Currency-Conversion project for Spring Boot</description>
     <properties>
         <docker.skip>false</docker.skip>
+        <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.amsidh.mvc</groupId>
+            <artifactId>common</artifactId>
+            <version>1.1.0-RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+        </dependency>
+        <!-- Log Message in Json -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

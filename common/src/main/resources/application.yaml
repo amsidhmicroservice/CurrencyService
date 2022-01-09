@@ -1,0 +1,36 @@
+resilience4j:
+  retry:
+    configs:
+      default:
+        maxAttempts: 5
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        exponentialMaxWaitDuration: 10s
+        retryExceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+        ignoreExceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+    instances:
+      currency-exchange-retry:
+        baseConfig: default
+
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
+        minimum-number-of-calls: 10 #The number of calls after which the error rate is calculated. I have assigned it with a small value for test purpose.
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
+        automatic-transition-from-open-to-half-open-enabled: true
+    instances:
+      currency-exchange-circuitbreaker:
+        baseConfig: default
+
+logging:
+  level:
+    ROOT: ERROR
+    com.amsidh.mvc: INFO
