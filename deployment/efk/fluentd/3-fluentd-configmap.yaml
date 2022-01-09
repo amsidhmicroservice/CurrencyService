@@ -28,7 +28,8 @@ data:
         <pattern>
           format json
           time_key logTime
-          time_format %Y-%m-%dT%H:%M:%S.%NZ
+          time_format %Y-%m-%dT%H:%M:%S.%N%z
+          keep_time_key true
         </pattern>
         <pattern>
           format none
@@ -58,7 +59,7 @@ data:
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
       suppress_type_name true
       logstash_format true
-      logstash_prefix ${record['kubernetes']['pod_name']}
+      logstash_prefix ${record['kubernetes']['container_name']}
       buffer_chunk_limit 2M
       reload_connections true
       reconnect_on_error true
