@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static io.github.resilience4j.decorators.Decorators.ofSupplier;
 
@@ -64,7 +65,10 @@ public class ConversionController {
         return ofSupplier(() -> restTemplate.getForEntity(currencyExchangeUrlFullPath, CurrencyExchange.class))
                 .withCircuitBreaker(circuitBreaker)
                 .withRetry(retry)
-                .withFallback((currencyExchangeResponseEntity, throwable) -> ResponseEntity.ok(CurrencyExchange.builder().build()))
+                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElseGet(()-> {
+                      log.error("Error thrown from Currency-Service. {0}", throwable);
+                      return null;
+                  }))
                 .decorate()
                 .get();
 
