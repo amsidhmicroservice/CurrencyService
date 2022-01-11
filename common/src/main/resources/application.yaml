@@ -2,18 +2,19 @@ resilience4j:
   retry:
     configs:
       default:
-        maxAttempts: 5
+        maxAttempts: 5 # in fact, there will be only (5-1=4) retry attempt
         waitDuration: 2s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
-        exponentialMaxWaitDuration: 10s
+        exponentialMaxWaitDuration: 10s 
         retryExceptions:
           - org.springframework.web.client.ResourceAccessException
           - org.springframework.web.client.HttpServerErrorException
         ignoreExceptions:
           - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+          - io.github.resilience4j.bulkhead.BulkheadFullException
     instances:
-      currency-exchange-retry:
+      currency-exchange-api-call-retry:
         baseConfig: default
 
   circuitbreaker:
@@ -26,11 +27,32 @@ resilience4j:
         waitDurationInOpenState: 5s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
         failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
         automatic-transition-from-open-to-half-open-enabled: true
+        writable-stack-trace-enabled: false
+        recordExceptions:
+          - java.lang.Throwable
+        ignoreExceptions:
+          # thrown when a thread pool reaches max threads amount and max queue capacity
+          - io.github.resilience4j.bulkhead.BulkheadFullException
     instances:
-      currency-exchange-circuitbreaker:
+      currency-exchange-api-call-circuit-breaker:
         baseConfig: default
+
+  thread-pool-bulkhead:
+    configs:
+      default:
+        core-thread-pool-size: 1  # number of processors available-1.
+        max-thread-pool-size: 1 # maximum number of processors available. Limit the number of concurrent calls
+        keep-alive-duration: 20ms
+        queue-capacity: 1
+        writable-stack-trace-enabled: true
+        context-propagators:
+          - com.amsidh.mvc.propagator.MdcContextPropagator
+    instances:
+      currency-exchange-api-call-bulkhead:
+        base-config: default
+
 
 logging:
   level:
     ROOT: ERROR
-    com.amsidh.mvc: INFO
+    com.amsidh.mvc: info

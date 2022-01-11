@@ -4,6 +4,8 @@ import com.amsidh.mvc.model.CurrencyConversion;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.amsidh.mvc.service.InstanceInformationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.bulkhead.ThreadPoolBulkhead;
+import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.retry.Retry;
@@ -23,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.amsidh.mvc.common.Constant.CURRENCY_EXCHANGE_API_CALL_CIRCUIT_BREAKER;
+import static com.amsidh.mvc.common.Constant.CURRENCY_EXCHANGE_API_CALL_RETRY;
 import static io.github.resilience4j.decorators.Decorators.ofSupplier;
 
 @RequiredArgsConstructor
@@ -35,6 +39,7 @@ public class ConversionController {
     private final InstanceInformationService instanceInformationService;
     private final RetryRegistry retryRegistry;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
+    private final ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry;
     private final ObjectMapper objectMapper;
 
     @Value("${CURRENCY_EXCHANGE_URL:http://localhost:8181}")
@@ -49,29 +54,28 @@ public class ConversionController {
 
         ResponseEntity<CurrencyExchange> responseEntity = getCurrencyExchangeResponseEntity(currencyFrom, currencyTo);
         CurrencyExchange exchange = responseEntity != null ? responseEntity.getBody() : CurrencyExchange.builder().build();
-        log.info("Response received from currency-exchange service {}", objectMapper.writeValueAsBytes(exchange));
+        log.info("Response received from currency-exchange service {}", objectMapper.writeValueAsString(exchange));
         CurrencyConversion.CurrencyConversionBuilder builder = CurrencyConversion.builder().from(currencyFrom).to(currencyTo).quantity(quantity).conversionEnvironmentInfo(instanceInformationService.retrieveInstanceInfo());
         builder = exchange != null ? builder.id(exchange.getId()).conversionMultiple(exchange.getConversionMultiple()).exchangeEnvironmentInfo(exchange.getExchangeEnvironmentInfo()).totalCalculatedAmount(quantity.multiply(exchange.getConversionMultiple() != null ? exchange.getConversionMultiple() : new BigDecimal(0))) : builder;
         log.info("=======================================End Request================================================");
         return builder.build();
     }
 
+    @SneakyThrows
     private ResponseEntity<CurrencyExchange> getCurrencyExchangeResponseEntity(String currencyFrom, String currencyTo) {
         String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
         log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
 
-        Retry retry = retryRegistry.retry("currency-exchange-retry");
-        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("currency-exchange-circuitbreaker");
+        Retry retry = retryRegistry.retry(CURRENCY_EXCHANGE_API_CALL_RETRY);
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(CURRENCY_EXCHANGE_API_CALL_CIRCUIT_BREAKER);
+        ThreadPoolBulkhead threadPoolBulkhead = threadPoolBulkheadRegistry.bulkhead("currency-exchange-api-call-bulkhead");
         return ofSupplier(() -> restTemplate.getForEntity(currencyExchangeUrlFullPath, CurrencyExchange.class))
                 .withCircuitBreaker(circuitBreaker)
                 .withRetry(retry)
-                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElseGet(()-> {
-                      log.error("Error thrown from Currency-Service. {0}", throwable);
-                      return null;
-                  }))
+                .withThreadPoolBulkhead(threadPoolBulkhead)
+                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElseGet(() -> null))
                 .decorate()
-                .get();
-
+                .get().toCompletableFuture().get();
 
     }
 }

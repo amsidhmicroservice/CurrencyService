@@ -8,50 +8,94 @@ metadata:
 data:
   fluent.conf: |-
     ################################################################
+    <system>
+      root_dir /tmp/fluentd-buffers/
+    </system>
     <label @FLUENT_LOG>
       <match fluent.**>
-        @type null
+        @type stdout
       </match>
     </label>
     
     <source>
+      @id fluentd-containers.log
       @type tail
-      path /var/log/containers/currency-conversion-*.log,/var/log/containers/currency-exchange-*.log,/var/log/containers/counter_default_count-*.log
-      pos_file /var/log/fluentd-containers-currency.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
-      tag kubernetes.*
-      refresh_interval 30
-      read_from_head true
-      emit_unmatched_lines true
+      path /var/log/containers/counter*.log, /var/log/containers/currency*.log
+      pos_file /var/log/containers.log.pos
+      tag  raw.kubernetes.*
+      refresh_interval 5s
       <parse>
         @type multi_format
         <pattern>
           format json
-          time_key logTime
-          time_format %Y-%m-%dT%H:%M:%S.%N%z
-          keep_time_key true
+          time_key timestamp
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+        </pattern>
+      </parse>
+    </source>
+    
+    # Detect exceptions in the log output and forward them as one log entry.
+    <match raw.kubernetes.**>
+      @id kubernetes
+      @type detect_exceptions
+      remove_tag_prefix raw
+      message log
+      stream stream
+      multiline_flush_interval 5
+      max_bytes 500000
+      max_lines 1000
+    </match>
+    
+    # Concatenate multi-line logs
+    <filter **>
+      @id filter_concat
+      @type concat
+      key message
+      multiline_end_regexp /\n$/
+      separator ""
+    </filter>
+    
+    # Enriches records with Kubernetes metadata
+    <filter kubernetes.**>
+      @id filter_kubernetes_metadata
+      @type kubernetes_metadata
+      verify_ssl false
+    </filter>
+    
+    # Fixes json fields in Elasticsearch
+    <filter kubernetes.**>
+      @id filter_parser
+      @type parser
+      key_name log
+      reserve_data true
+      remove_key_name_field true
+      <parse>
+        @type multi_format
+        <pattern>
+          format json
         </pattern>
         <pattern>
           format none
         </pattern>
       </parse>
-    </source>
-    
-    <filter kubernetes.**>
-      @type parser # record_transformer
-      # @log_level debug
-      <parse>
-        @type json
-      </parse>
-      key_name log
     </filter>
     
-    <filter kubernetes.**>
-      @type kubernetes_metadata
-      verify_ssl false
-    </filter>
+    #exclude kube-system
+    <match kubernetes.var.log.containers.**kube-system**.log>
+      @type null
+    </match>
     
-    <match kubernetes.**>
+    <source>
+      @id forward
+      @type forward
+    </source> 
+    
+    <match **>
+      @id elasticsearch_dynamic
       @type elasticsearch_dynamic
       @log_level info
       include_tag_key true
@@ -59,30 +103,19 @@ data:
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
       suppress_type_name true
       logstash_format true
-      logstash_prefix ms-log-${record['kubernetes']['container_name']}
-      buffer_chunk_limit 2M
-      reload_connections true
-      reconnect_on_error true
-      max_retry_wait 30
-      disable_retry_limit
-    </match>
-    <match **>
-      @type elasticsearch
-      @log_level info
-      include_tag_key true
-      host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
-      port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
-      suppress_type_name true
-      logstash_format true
-      # Set the chunk limits.
-      buffer_chunk_limit 2M
-      buffer_queue_limit 8
-      # Never wait longer than 5 minutes between retries.
-      max_retry_wait 30
-      # Disable the limit on the number of retries (retry forever).
-      disable_retry_limit
-      # Use multiple threads for processing.
-      num_threads 5
-      reload_connections true
-      reconnect_on_error true
+      logstash_prefix k8s-ms-${record['kubernetes']['container_name']}
+      request_timeout 30s
+      <buffer>
+        @type file
+        path /var/log/fluentd-buffers/kubernetes.system.buffer
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 2
+        flush_interval 5s
+        retry_forever
+        retry_max_interval 30
+        chunk_limit_size 2M
+        queue_limit_length 8
+        overflow_action block
+      </buffer>
     </match>
