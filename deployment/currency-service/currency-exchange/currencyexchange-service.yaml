@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.0-RELEASE
+    version: 1.1.2-RELEASE
   name: currency-exchange
 spec:
   ports:
@@ -12,6 +12,6 @@ spec:
       port: 8181
   selector:
     app: currency-exchange
-    version: 1.1.0-RELEASE
+    version: 1.1.2-RELEASE
   sessionAffinity: ClientIP
   type: ClusterIP

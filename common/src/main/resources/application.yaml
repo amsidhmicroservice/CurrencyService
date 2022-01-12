@@ -6,7 +6,7 @@ resilience4j:
         waitDuration: 2s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
-        exponentialMaxWaitDuration: 10s 
+        exponentialMaxWaitDuration: 10s
         retryExceptions:
           - org.springframework.web.client.ResourceAccessException
           - org.springframework.web.client.HttpServerErrorException
