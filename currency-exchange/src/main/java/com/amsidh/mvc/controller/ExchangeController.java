@@ -1,13 +1,14 @@
 package com.amsidh.mvc.controller;
 
-import com.amsidh.mvc.repository.ExchangeRepository;
-import com.amsidh.mvc.service.InstanceInformationService;
 import com.amsidh.mvc.entity.CurrencyExchangeEntity;
 import com.amsidh.mvc.model.CurrencyExchange;
+import com.amsidh.mvc.repository.ExchangeRepository;
+import com.amsidh.mvc.service.InstanceInformationService;
 import com.amsidh.mvc.util.ConvertorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,12 +35,12 @@ public class ExchangeController {
     }
 
     @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String throwException() {
+    public ResponseEntity<String> throwException() {
         log.info("Testing Info Message");
         log.warn("Testing Warn Message");
         log.debug("Testing Debug Message");
         instanceInformationService.throwException();
-        return "This message won't return to the caller as it throws exception in the service method call";
+        return ResponseEntity.ok("This message won't return to the caller as it throws exception in the service method call");
     }
 
 }

@@ -4,5 +4,6 @@ import com.amsidh.mvc.exception.MyCustomException;
 
 public interface InstanceInformationService {
     String retrieveInstanceInfo();
-    String throwException() throws MyCustomException;
+
+    void throwException() throws MyCustomException;
 }

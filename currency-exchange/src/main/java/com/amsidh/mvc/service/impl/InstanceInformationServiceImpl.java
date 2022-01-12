@@ -1,7 +1,7 @@
 package com.amsidh.mvc.service.impl;
 
-import com.amsidh.mvc.service.InstanceInformationService;
 import com.amsidh.mvc.exception.MyCustomException;
+import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,7 @@ public class InstanceInformationServiceImpl implements InstanceInformationServic
     }
 
     @Override
-    public String throwException() throws MyCustomException {
-        MyCustomException myCustomException= new MyCustomException("Manually throwing exception");
-        throw myCustomException;
+    public void throwException() throws MyCustomException {
+        throw new MyCustomException("Manually throwing exception");
     }
 }

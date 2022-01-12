@@ -2,7 +2,6 @@ package com.amsidh.mvc.propagator;
 
 import io.github.resilience4j.core.ContextPropagator;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;

@@ -9,7 +9,7 @@ spec:
           - path: /currency-conversion/*
             pathType: ImplementationSpecific
             backend:
-              service: 
+              service:
                 name: currency-conversion
                 port:
                   number: 8282
@@ -17,7 +17,7 @@ spec:
           - path: /currency-exchange/*
             pathType: ImplementationSpecific
             backend:
-              service: 
+              service:
                 name: currency-exchange
                 port:
                   number: 8181

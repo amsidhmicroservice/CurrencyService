@@ -73,7 +73,7 @@ public class ConversionController {
                 .withCircuitBreaker(circuitBreaker)
                 .withRetry(retry)
                 .withThreadPoolBulkhead(threadPoolBulkhead)
-                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElseGet(() -> null))
+                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElse(null))
                 .decorate()
                 .get().toCompletableFuture().get();
 
