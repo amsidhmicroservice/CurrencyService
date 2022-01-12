@@ -13,6 +13,11 @@
     <version>1.1.2-RELEASE</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
+    <modules>
+        <module>common</module>
+        <module>currency-exchange</module>
+        <module>currency-conversion</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -137,12 +142,6 @@
         </plugins>
 
     </build>
-
-    <modules>
-        <module>currency-exchange</module>
-        <module>currency-conversion</module>
-        <module>common</module>
-    </modules>
 
     <profiles>
 
