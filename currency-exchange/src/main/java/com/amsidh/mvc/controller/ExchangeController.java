@@ -34,13 +34,21 @@ public class ExchangeController {
         return ConvertorUtil.toExchangeDTO(currencyExchangeEntity);
     }
 
-    @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> throwException() {
+    @GetMapping(value = "/message/{records}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> throwException(@PathVariable(name = "records") Integer records) {
         log.info("Testing Info Message");
         log.warn("Testing Warn Message");
         log.debug("Testing Debug Message");
+        log.info("Samle Big Message {}", getMessage(records));
         instanceInformationService.throwException();
-        return ResponseEntity.ok("This message won't return to the caller as it throws exception in the service method call");
+        return ResponseEntity.ok("{\"message\":\"This message won't return to the caller as it throws exception in the service method call\"}");
     }
 
+    private String getMessage(Integer records) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < records; i++) {
+            sb.append(i+" : Researchers from the University of Bristol developed apparatus that generate tiny virus-containing particles and gently levitate them between two electric rings for anywhere between five seconds to 20 minutes, while controlling the surrounding temperature, humidity and UV light intensity.\n");
+        }
+        return sb.toString();
+    }
 }
