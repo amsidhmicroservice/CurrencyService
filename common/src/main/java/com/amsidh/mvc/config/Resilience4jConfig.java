@@ -21,9 +21,7 @@ public class Resilience4jConfig {
         return new RegistryEventConsumer<>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
-                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> {
-                    log.info("Retry event {} retrying {} times for an error ", event.getName(), event.getNumberOfRetryAttempts(), event.getLastThrowable() != null ? event.getLastThrowable().getMessage() : "");
-                });
+                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.info("Retry event {} retrying {} times for an error {}", event.getName(), event.getNumberOfRetryAttempts(), event.getLastThrowable().getMessage()));
             }
 
             @Override
@@ -40,7 +38,7 @@ public class Resilience4jConfig {
 
     @Bean
     public RegistryEventConsumer<CircuitBreaker> getCircuitBreakerRegistryEventConsumer() {
-        return new RegistryEventConsumer<CircuitBreaker>() {
+        return new RegistryEventConsumer<>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
                 CircuitBreaker circuitBreaker = entryAddedEvent.getAddedEntry();

@@ -1,11 +1,13 @@
 package com.amsidh.mvc.exception;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
 @Builder
 public class ErrorMessage {
     private int statusCode;

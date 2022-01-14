@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static com.amsidh.mvc.common.Constant.CURRENCY_EXCHANGE_API_CALL_CIRCUIT_BREAKER;
 import static com.amsidh.mvc.common.Constant.CURRENCY_EXCHANGE_API_CALL_RETRY;
@@ -73,7 +72,7 @@ public class ConversionController {
                 .withCircuitBreaker(circuitBreaker)
                 .withRetry(retry)
                 .withThreadPoolBulkhead(threadPoolBulkhead)
-                .withFallback((currencyExchangeResponseEntity, throwable) -> Optional.ofNullable(currencyExchangeResponseEntity).orElse(null))
+                .withFallback((currencyExchangeResponseEntity, throwable) -> currencyExchangeResponseEntity)
                 .decorate()
                 .get().toCompletableFuture().get();
 
@@ -91,7 +90,7 @@ public class ConversionController {
     private String getMessage(Integer records) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < records; i++) {
-            sb.append(i+" : Researchers from the University of Bristol developed apparatus that generate tiny virus-containing particles and gently levitate them between two electric rings for anywhere between five seconds to 20 minutes, while controlling the surrounding temperature, humidity and UV light intensity.\n");
+            sb.append(i).append(" : Researchers from the University of Bristol developed apparatus that generate tiny virus-containing particles and gently levitate them between two electric rings for anywhere between five seconds to 20 minutes, while controlling the surrounding temperature, humidity and UV light intensity.\n");
         }
         return sb.toString();
     }
