@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.4-RELEASE
+    version: 1.1.5-RELEASE
   name: currency-exchange
   namespace: default
 spec:
@@ -21,10 +21,10 @@ spec:
     metadata:
       labels:
         app: currency-exchange
-        version: 1.1.4-RELEASE
+        version: 1.1.5-RELEASE
     spec:
       containers:
-        - image: amsidhmicroservice/currency-exchange:1.1.4-RELEASE
+        - image: amsidhmicroservice/currency-exchange:1.1.5-RELEASE
           imagePullPolicy: Always
           name: currency-exchange
           ports:

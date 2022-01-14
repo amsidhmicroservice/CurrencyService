@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app: currency-conversion
-    version: 1.1.4-RELEASE
+    version: 1.1.5-RELEASE
   name: currency-conversion
 spec:
   ports:
@@ -12,6 +12,6 @@ spec:
       port: 8282
   selector:
     app: currency-conversion
-    version: 1.1.4-RELEASE
+    version: 1.1.5-RELEASE
   sessionAffinity: ClientIP
   type: NodePort
