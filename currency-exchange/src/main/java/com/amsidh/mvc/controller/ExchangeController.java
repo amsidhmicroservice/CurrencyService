@@ -36,12 +36,10 @@ public class ExchangeController {
 
     @GetMapping(value = "/message/{records}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> throwException(@PathVariable(name = "records") Integer records) {
-        log.info("Testing Info Message");
-        log.warn("Testing Warn Message");
-        log.debug("Testing Debug Message");
-        log.info("Samle Big Message {}", getMessage(records));
-        instanceInformationService.throwException();
-        return ResponseEntity.ok("{\"message\":\"This message won't return to the caller as it throws exception in the service method call\"}");
+        log.info("Sample Big Message {}", getMessage(records));
+        RuntimeException runtimeException = new RuntimeException("Manually exception");
+        log.error("Explicit exception thrown",runtimeException);
+        return ResponseEntity.ok("This message won't return to the caller as it throws exception in the service method call");
     }
 
     private String getMessage(Integer records) {

@@ -1,6 +1,8 @@
 package com.amsidh.mvc.config;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.event.CircuitBreakerEvent;
+import io.github.resilience4j.circuitbreaker.event.CircuitBreakerOnStateTransitionEvent;
 import io.github.resilience4j.core.registry.EntryAddedEvent;
 import io.github.resilience4j.core.registry.EntryRemovedEvent;
 import io.github.resilience4j.core.registry.EntryReplacedEvent;
@@ -19,7 +21,9 @@ public class Resilience4jConfig {
         return new RegistryEventConsumer<>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
-                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.error(event.toString()));
+                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> {
+                    log.info("Retry event {} retrying {} times for an error ", event.getName(), event.getNumberOfRetryAttempts(), event.getLastThrowable() != null ? event.getLastThrowable().getMessage() : "");
+                });
             }
 
             @Override
@@ -36,20 +40,31 @@ public class Resilience4jConfig {
 
     @Bean
     public RegistryEventConsumer<CircuitBreaker> getCircuitBreakerRegistryEventConsumer() {
-        return new RegistryEventConsumer<>() {
+        return new RegistryEventConsumer<CircuitBreaker>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
-                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
+                CircuitBreaker circuitBreaker = entryAddedEvent.getAddedEntry();
+                circuitBreaker.getEventPublisher().onStateTransition(this::onStateTransition);
+                circuitBreaker.getEventPublisher().onEvent(event -> onEvent(circuitBreaker, event));
+            }
+
+            private void onStateTransition(CircuitBreakerOnStateTransitionEvent event) {
+                log.info(String.format("%s state : %s", event.getCircuitBreakerName(), event));
+            }
+
+            private void onEvent(CircuitBreaker cb, CircuitBreakerEvent event) {
+                log.info(String.format("%s event(%s) : %s", event.getCircuitBreakerName(), cb.getState(), event));
             }
 
             @Override
             public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
-
+                entryRemoveEvent.getRemovedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-
+                entryReplacedEvent.getOldEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
+                entryReplacedEvent.getNewEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
         };
     }

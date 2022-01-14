@@ -83,6 +83,8 @@ public class ConversionController {
     public ResponseEntity<String> throwException(@PathVariable(name = "records") Integer records) {
         log.info("Testing Info Message");
         log.info("Sample Big Message {}", getMessage(records));
+        RuntimeException runtimeException = new RuntimeException("Manually exception");
+        log.error("Explicit exception thrown",runtimeException);
         return ResponseEntity.ok("{\"message\":\"This message won't return to the caller as it throws exception in the service method call\"}");
     }
 
