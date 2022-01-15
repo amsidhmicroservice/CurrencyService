@@ -22,6 +22,7 @@ data:
       @type tail
       path /var/log/containers/counter*.log, /var/log/containers/currency*.log
       pos_file /var/log/containers.log.pos
+      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
       tag  raw.kubernetes.*
       refresh_interval 5s
       <parse>
@@ -105,7 +106,7 @@ data:
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
       suppress_type_name true
       logstash_format true
-      logstash_prefix k8s-ms-${record['kubernetes']['container_name']}
+      logstash_prefix ms-${record['kubernetes']['container_name']}
       request_timeout 30s
       <buffer>
         @type file
