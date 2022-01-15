@@ -11,7 +11,6 @@
     <description>Currency-Conversion project for Spring Boot</description>
     <properties>
         <docker.skip>false</docker.skip>
-        <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
     </properties>
     <dependencies>
         <dependency>
@@ -19,13 +18,5 @@
             <artifactId>common</artifactId>
             <version>1.1.5-RELEASE</version>
         </dependency>
-
-        <!-- Log Message in Json -->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder.version}</version>
-        </dependency>
-
     </dependencies>
 </project>
