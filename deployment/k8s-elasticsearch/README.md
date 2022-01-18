@@ -12,6 +12,6 @@ https://faun.pub/setup-elastic-search-cluster-kibana-fluentd-on-kubernetes-with-
 
 $ kubectl exec -it $(kubectl get pods -n infra | grep elasticsearch-client | sed -n 1p | awk '{print $1}') -n infra -- bin/elasticsearch-setup-passwords auto -b
 
-
+kubectl create secret generic elasticsearch-pw-elastic -n infra --from-literal password=XOzLZRfCEZRuudHavHh7
 
 
