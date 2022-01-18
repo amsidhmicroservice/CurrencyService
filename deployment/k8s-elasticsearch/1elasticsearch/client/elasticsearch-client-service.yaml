@@ -16,4 +16,5 @@ spec:
   selector:
     app: elasticsearch
     role: client
+  type: LoadBalancer
 ---
