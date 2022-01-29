@@ -26,6 +26,8 @@ spec:
               value: "http://elasticsearch:9200"
             - name: ELASTICSEARCH_HOSTS
               value: "http://elasticsearch:9200"
+            - name: TZ
+              value: "Asia/Kolkata"
 ---
 apiVersion: v1
 kind: Service

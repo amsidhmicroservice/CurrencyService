@@ -32,6 +32,23 @@ spec:
             secretKeyRef:
               name: elasticsearch-pw-elastic
               key: password
+        - name: XPACK_SECURITY_SESSION_IDLETIMEOUT
+          value: "1d"
+        - name: XPACK_SECURITY_SESSION_LIFESPAN
+          value: "30d"
+        - name: XPACK_SECURITY_ENCRYPTIONKEY
+          value: "bbfe8ae38274521f9311cb5467cbee41"
+        - name: XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY
+          value: "abf6f2da5ba45222b4e66e38d50e7d63"
+        - name: MONITORING_ENABLED
+          value: "true"
+        - name: XPACK_MONITORING_COLLECTION_ENABLED
+          value: "true"
+        - name: TZ
+          value: "Asia/Kolkata"
+        - name: I18N_LOCALE
+          value: "as-IN"
+
         volumeMounts:
         - name: config
           mountPath: /usr/share/kibana/config/kibana.yml

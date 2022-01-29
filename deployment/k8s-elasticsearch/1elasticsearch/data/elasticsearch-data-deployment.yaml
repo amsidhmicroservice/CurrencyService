@@ -32,6 +32,13 @@ spec:
               value: elasticsearch-master
             - name: "ES_JAVA_OPTS"
               value: "-Xms300m -Xmx300m"
+            - name: XPACK_MONITORING_COLLECTION_ENABLED
+              value: "true"
+            - name: TZ
+              value: "Asia/Kolkata"
+            - name: I18N_LOCALE
+              value: "as-IN"
+
           ports:
             - containerPort: 9300
               name: transport

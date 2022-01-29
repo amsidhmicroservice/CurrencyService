@@ -11,7 +11,7 @@
 
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>1.1.5-RELEASE</version>
+    <version>1.1.6-RELEASE</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
 

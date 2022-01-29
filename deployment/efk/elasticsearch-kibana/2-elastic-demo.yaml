@@ -36,6 +36,8 @@ spec:
               value: "false"
             - name: ES_JAVA_OPTS
               value: "-Xms512m -Xmx512m"
+            - name: TZ
+              value: "Asia/Kolkata"
 ---
 apiVersion: v1
 kind: Service
