@@ -30,6 +30,12 @@ spec:
           ports:
             - name: exchange-port
               containerPort: 8181
+          env:
+            - name: TZ
+              value: "Asia/Kolkata"
+            - name: I18N_LOCALE
+              value: "as-IN"
+
           resources:
             requests:
               memory: 512Mi

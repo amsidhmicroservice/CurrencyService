@@ -14,15 +14,16 @@ data:
         @type stdout
       </match>
     </label>
-    
     <source>
       @id fluentd-containers.log
       @type tail
       path /var/log/containers/counter*.log, /var/log/containers/currency*.log
       pos_file /var/log/containers.log.pos
       exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
-      tag  raw.kubernetes.*
+      tag raw.kubernetes.*
+      read_from_head true
       refresh_interval 5s
+      encoding UTF-8
       <parse>
         @type multi_format
         <pattern>
@@ -36,12 +37,14 @@ data:
           time_format %Y-%m-%dT%H:%M:%S.%N%:z
           localtime true
         </pattern>
+        <pattern>
+          format none
+        </pattern>
       </parse>
     </source>
-    
     # Detect exceptions in the log output and forward them as one log entry.
     <match raw.kubernetes.**>
-      @id kubernetes
+      @id detect_exceptions_id
       @type detect_exceptions
       remove_tag_prefix raw
       message log
@@ -53,75 +56,74 @@ data:
     
     # Concatenate multi-line logs
     <filter **>
-      @id filter_concat
+      @id filter_concat_id
       @type concat
       key message
       multiline_end_regexp /\n$/
       separator ""
     </filter>
-    
+   
     # Enriches records with Kubernetes metadata
-    <filter kubernetes.**>
-      @id filter_kubernetes_metadata
+    <filter **>
+      @id filter_kubernetes_metadata_id
       @type kubernetes_metadata
-      verify_ssl false
     </filter>
-    
-    # Fixes json fields in Elasticsearch
-    <filter kubernetes.**>
-      @id filter_parser
-      @type parser
-      key_name log
-      reserve_data true
-      remove_key_name_field true
-      <parse>
-        @type multi_format
-        <pattern>
-          format json
-        </pattern>
-        <pattern>
-          format none
-        </pattern>
-      </parse>
-    </filter>
-    
-    #exclude kube-system
-    <match kubernetes.var.log.containers.**kube-system**.log>
-      @type null
-    </match>
-    
-    <source>
-      @id forward
-      @type forward
-    </source> 
-
-     # we send the logs to Elasticsearch
+   
     <match **>
-       @type elasticsearch_dynamic
-       @log_level info
-       include_tag_key true
-       host "#{ENV['FLUENT_ELASTICSEARCH_HOST']}"
-       port "#{ENV['FLUENT_ELASTICSEARCH_PORT']}"
-       user "#{ENV['FLUENT_ELASTICSEARCH_USER']}"
-       password "#{ENV['FLUENT_ELASTICSEARCH_PASSWORD']}"
-       scheme "#{ENV['FLUENT_ELASTICSEARCH_SCHEME'] || 'http'}"
-       ssl_verify "#{ENV['FLUENT_ELASTICSEARCH_SSL_VERIFY'] || 'true'}"
-       reload_connections true
-       logstash_format true
-       logstash_prefix ms-${record['kubernetes']['container_name']}
-       <buffer>
-           @type file
-           path /var/log/fluentd-buffers/kubernetes.system.buffer
-           flush_mode interval
-           retry_type exponential_backoff
-           flush_thread_count 2
-           flush_interval 5s
-           retry_forever true
-           retry_max_interval 30
-           chunk_limit_size 2M
-           queue_limit_length 32
-           overflow_action block
-       </buffer>
+      @id multi_target
+      @type copy
+      <store>
+        @id sendToElasticSearch
+        @type elasticsearch_dynamic
+        @log_level info
+        log_es_400_reason true
+        include_tag_key true
+        type_name _doc
+        compression_level best_compression
+        prefer_oj_serializer true
+        host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'localhost'}"
+        port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
+        user "#{ENV['FLUENT_ELASTICSEARCH_USER'] || 'elastic'}"
+        password "#{ENV['FLUENT_ELASTICSEARCH_PASSWORD'] || 'kCLd664GOWmlmfncS81Z'}"
+        scheme "#{ENV['FLUENT_ELASTICSEARCH_SCHEME'] || 'http'}"
+        ssl_verify "#{ENV['FLUENT_ELASTICSEARCH_SSL_VERIFY'] || 'true'}"
+        reconnect_on_error true
+        reload_on_failure true
+        reload_connections false
+        suppress_type_name false
+        logstash_format true
+        logstash_prefix ms-${record['kubernetes']['container_name']}
+        request_timeout 30s
+        <buffer>
+          @type file
+          path /var/log/fluentd-buffers/kubernetes.system.buffer
+          flush_mode interval
+          retry_type exponential_backoff
+          flush_thread_count 2
+          flush_interval 5s
+          retry_forever true
+          retry_max_interval 30
+          chunk_limit_size 2M
+          queue_limit_length 8
+          overflow_action block
+        </buffer>
+      </store>
+      <store>
+        @id copyToFile
+        @type file
+        path /var/log/backup/
+        compress gzip
+        <format>
+          localtime false
+        </format>
+        <buffer time>
+          timekey_wait 10m
+          timekey 86400
+          timekey_use_utc true
+          path /var/log/backup/
+        </buffer>
+        <inject>
+          localtime false
+        </inject>
+      </store>
     </match>
-
-
