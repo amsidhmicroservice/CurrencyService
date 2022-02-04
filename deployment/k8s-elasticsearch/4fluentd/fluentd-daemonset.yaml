@@ -90,6 +90,8 @@ spec:
           readOnly: true
         - name: fluentd-config
           mountPath: /fluentd/etc # path of fluentd config file
+        - name: bureau-service-mount
+          mountPath: /bureau-service/templog
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -101,3 +103,6 @@ spec:
       - name: fluentd-config
         configMap:
           name: fluentd-config # name of the config map we will create
+      - name: bureau-service-mount
+        hostPath:
+          path: /bureau-service/templog

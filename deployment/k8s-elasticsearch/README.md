@@ -1,3 +1,5 @@
+#Minikube 
+minikube start --cpus 4 --memory 5120 --mount-string="C:/Users/amsid/templog:/bureau-service/templog" --mount
 # k8s-elasticsearch
 
 See our website blog for more details.
@@ -19,32 +21,29 @@ Deployment sequence
   kubectl get logs of master to see the last success log message as
   "Cluster health status changed from [YELLOW] to [GREEN]"
 3) Create the default password for different default users
-   C:\Users\amsid>kubectl exec -it pod/elasticsearch-client-58795f8fb8-j6ksl -n infra -- bin/elasticsearch-setup-passwords auto -b
+   C:\Users\amsid>kubectl exec -it pod/elasticsearch-client-58795f8fb8-nf4c6 -n infra -- bin/elasticsearch-setup-passwords auto -b
    Defaulted container "elasticsearch-client" out of: elasticsearch-client, increase-vm-max-map (init)
    Changed password for user apm_system
-   PASSWORD apm_system = AYksChtiyIRDCefEKbfm
-    
-    Changed password for user kibana_system
-    PASSWORD kibana_system = Y7cGI23Rdzq964qSeUCU
-    
-    Changed password for user kibana
-    PASSWORD kibana = Y7cGI23Rdzq964qSeUCU
-    
-    Changed password for user logstash_system
-    PASSWORD logstash_system = 31jKanXkt7aqTMipXQRz
-    
-    Changed password for user beats_system
-    PASSWORD beats_system = 2ibKjaVZNckllmzUcQBW
-    
-    Changed password for user remote_monitoring_user
-    PASSWORD remote_monitoring_user = x8PJ47BIfIrQRM6Nf1nh
-    
-    Changed password for user elastic
-    PASSWORD elastic = kCLd664GOWmlmfncS81Z
-    
-    C:\Users\amsid>
+   PASSWORD apm_system = LfGF5dOx9wsFpOqz9Iec
 
-4) kubectl create secret generic elasticsearch-pw-elastic -n infra --from-literal password=kCLd664GOWmlmfncS81Z
+Changed password for user kibana_system
+PASSWORD kibana_system = h0oquW0qKxcRbzTqD2Pk
+
+Changed password for user kibana
+PASSWORD kibana = h0oquW0qKxcRbzTqD2Pk
+
+Changed password for user logstash_system
+PASSWORD logstash_system = SMmSJDmC0i5IdxXANVwr
+
+Changed password for user beats_system
+PASSWORD beats_system = 8Oc3XFHsy4iKetSCZ7Ng
+
+Changed password for user remote_monitoring_user
+PASSWORD remote_monitoring_user = tRXuC6IZITfNAUw7Pj9E
+
+Changed password for user elastic
+PASSWORD elastic = qQEu1vGgCXmVX655mwnb
+4) kubectl create secret generic elasticsearch-pw-elastic -n infra --from-literal password=qQEu1vGgCXmVX655mwnb
 
 5) Check whether we are able to access Elastic indices url with basic auth 
    a) kubectl port-forward service/elasticsearch-client -n infra 9200:9200

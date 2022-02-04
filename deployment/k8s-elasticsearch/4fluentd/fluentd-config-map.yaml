@@ -151,8 +151,9 @@ data:
   pods-source-fluent.conf: |-
     ####################FluentD Sources Configuration###############
     @include currency-exchange.conf
-    @include currency-conversion.conf 
+    #@include currency-conversion.conf 
     #@include counter.conf
+    @include sample-service.conf
   currency-exchange.conf: |-
     ########## currency-exchange FluentD Configuration#####################
     <source>
@@ -183,43 +184,13 @@ data:
         </pattern>
       </parse>
     </source>
-  currency-conversion.conf: |-
-    ########## currency-conversion  FluentD Configuration#####################
+  sample-service.conf: |-
+    ########## Sample-Service pod FluentD Configuration#####################
     <source>
-      @id source-currency-conversion-id
+      @id source-sample-id
       @type tail
-      path /var/log/containers/currency-conversion*.log
-      pos_file /var/log/currency-conversion.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
-      tag raw.kubernetes.*
-      read_from_head true
-      refresh_interval 5s
-      encoding UTF-8
-      <parse>
-        @type multi_format
-        <pattern>
-          format json
-          time_key timestamp
-          time_format %Y-%m-%dT%H:%M:%S.%NZ
-          localtime true
-        </pattern>
-        <pattern>
-          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
-          time_format %Y-%m-%dT%H:%M:%S.%N%:z
-          localtime true
-        </pattern>
-        <pattern>
-          format none
-        </pattern>
-      </parse>
-    </source>
-  counter.conf: |-
-    ########## Counter pod FluentD Configuration#####################
-    <source>
-      @id source-counter-id
-      @type tail
-      path /var/log/containers/counter*.log
-      pos_file /var/log/counter.log.pos
+      path /bureau-service/templog/sample-service*.log
+      pos_file /var/log/sample-service.log.pos
       exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
       tag raw.kubernetes.*
       read_from_head true
