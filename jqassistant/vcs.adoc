@@ -1,0 +1,65 @@
+[[vcs:Default]]
+[role=group,includesConstraints="vcs:*",includesConcepts="vcs:*"]
+== Version Control System
+
+The rules defined in this document refer to Git.
+
+=== Reports
+
+[[vcs:Authors]]
+[source,cypher,role=concept,reportType="wordcloud"]
+.The authors of this project as word cloud.
+----
+MATCH
+  (author:Author)-[:COMMITTED]->(:Commit)
+RETURN
+  author.email
+----
+
+=== Concepts
+
+[[vcs:CurrentBranch]]
+[source,cypher,role=concept]
+.The currently checked-out local branch is labeled with `Current`.
+----
+MATCH
+  (repository:Repository)-[:HAS_BRANCH]->(branch:Git:Branch)
+WHERE
+  branch.name starts with "heads/"
+MATCH
+  (repository)-[:HAS_HEAD]->(head:Git:Commit),
+  (branch)-[:HAS_HEAD]->(branchHead:Git:Commit),
+   p=shortestPath((branchHead)-[:HAS_PARENT*0..]->(head))
+SET
+  branch:Current
+RETURN
+  branch.name as CurrentBranch, length(p) as Offset
+----
+
+=== Constraints
+
+[[vcs:BranchesMustBeSynchronized]]
+[source,cypher,role=constraint]
+.jQAssistant specific feature branches must include the latest commit (HEAD) of the jQAssistante base feature branch "feature/jqassistant", i.e. merges are required into these branches.
+----
+MATCH
+  (base:Git:Branch)-[:HAS_HEAD]->(baseHead:Git:Commit)
+WHERE
+  base.name ends with "/feature/jqassistant"
+WITH
+  base, baseHead
+MATCH
+  (branch:Git:Branch)-[:HAS_HEAD]->(branchHead:Git:Commit)
+WHERE
+  branchHead <> baseHead
+  and branch.name contains "/feature/jqassistant-"
+OPTIONAL MATCH
+  p=shortestPath((branchHead)-[:HAS_PARENT*]->(baseHead))
+WITH
+  base, branch, p
+WHERE
+  p is null
+RETURN
+  base.name as BaseBranch, collect(branch.name) as OutdatedBranches
+----
+
