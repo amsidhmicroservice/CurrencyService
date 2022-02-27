@@ -39,6 +39,7 @@
 
         <sonar.sources>.</sonar.sources>
         <sonar.inclusions>pom.xml,/pom.xml,src/main/**,/src/test/**</sonar.inclusions>
+        <jqassistant.version>1.11.1</jqassistant.version>
 
     </properties>
 
@@ -151,6 +152,25 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.buschmais.jqassistant</groupId>
+                <artifactId>jqassistant-maven-plugin</artifactId>
+                <version>${jqassistant.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>scan</goal>
+                            <goal>analyze</goal>
+                        </goals>
+                        <configuration>
+                            <warnOnSeverity>MINOR</warnOnSeverity>
+                            <failOnSeverity>MAJOR</failOnSeverity>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>

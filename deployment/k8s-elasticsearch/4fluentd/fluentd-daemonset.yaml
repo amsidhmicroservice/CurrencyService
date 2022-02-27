@@ -61,7 +61,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1.14.2-debian-elasticsearch7-1.1
+        image: fluent/fluentd-kubernetes-daemonset:v1.14.5-debian-elasticsearch7-1.1
         env:
         - name:  FLUENT_ELASTICSEARCH_HOST
           value: "elasticsearch-client"
@@ -90,8 +90,6 @@ spec:
           readOnly: true
         - name: fluentd-config
           mountPath: /fluentd/etc # path of fluentd config file
-        - name: bureau-service-mount
-          mountPath: /bureau-service/templog
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -103,6 +101,3 @@ spec:
       - name: fluentd-config
         configMap:
           name: fluentd-config # name of the config map we will create
-      - name: bureau-service-mount
-        hostPath:
-          path: /bureau-service/templog

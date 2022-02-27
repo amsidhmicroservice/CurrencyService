@@ -21,29 +21,31 @@ Deployment sequence
   kubectl get logs of master to see the last success log message as
   "Cluster health status changed from [YELLOW] to [GREEN]"
 3) Create the default password for different default users
-   C:\Users\amsid>kubectl exec -it pod/elasticsearch-client-58795f8fb8-nf4c6 -n infra -- bin/elasticsearch-setup-passwords auto -b
+   C:\Users\amsid>kubectl exec -it pod/elasticsearch-client-58795f8fb8-pdgtj -n infra -- bin/elasticsearch-setup-passwords auto -b
    Defaulted container "elasticsearch-client" out of: elasticsearch-client, increase-vm-max-map (init)
    Changed password for user apm_system
-   PASSWORD apm_system = LfGF5dOx9wsFpOqz9Iec
+   PASSWORD apm_system = BijjTJAUAu2ekjy43gt2
 
 Changed password for user kibana_system
-PASSWORD kibana_system = h0oquW0qKxcRbzTqD2Pk
+PASSWORD kibana_system = a26Ox0RMnfQE4DaLbU28
 
 Changed password for user kibana
-PASSWORD kibana = h0oquW0qKxcRbzTqD2Pk
+PASSWORD kibana = a26Ox0RMnfQE4DaLbU28
 
 Changed password for user logstash_system
-PASSWORD logstash_system = SMmSJDmC0i5IdxXANVwr
+PASSWORD logstash_system = OTnaYTvux6j4FpvCMA2M
 
 Changed password for user beats_system
-PASSWORD beats_system = 8Oc3XFHsy4iKetSCZ7Ng
+PASSWORD beats_system = Nh5hPnW1mkTP0I07TPMn
 
 Changed password for user remote_monitoring_user
-PASSWORD remote_monitoring_user = tRXuC6IZITfNAUw7Pj9E
+PASSWORD remote_monitoring_user = HJAVFIvzzZPmuWukKccJ
 
 Changed password for user elastic
-PASSWORD elastic = qQEu1vGgCXmVX655mwnb
-4) kubectl create secret generic elasticsearch-pw-elastic -n infra --from-literal password=qQEu1vGgCXmVX655mwnb
+PASSWORD elastic = SHTLLjdPQE9PBrw4A2sd
+
+C:\Users\amsid>
+4) kubectl create secret generic elasticsearch-pw-elastic -n infra --from-literal password=SHTLLjdPQE9PBrw4A2sd
 
 5) Check whether we are able to access Elastic indices url with basic auth 
    a) kubectl port-forward service/elasticsearch-client -n infra 9200:9200

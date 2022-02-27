@@ -7,4 +7,4 @@ spec:
     - name: count
       image: busybox
       args: [ /bin/sh, -c,
-              'i=0; while true; do echo "{\"logTime\":\"2022-01-08T23:26:45.659Z\",\"service-name\":\"currency-exchange\",\"version\":\"1.1.5-RELEASE\",\"correlationId\":\"72861234f66c6ae7\",\"request-tracking\":{\"span_id\":\"72861234f66c6ae7\"},\"logger\":\"com.amsidh.mvc.currencyexchange.controller.ExchangeController\",\"severity\":\"INFO\",\"message\":\"=======Start Request=======\",\"log_class_info\":{\"log_source_class\":\"com.amsidh.mvc.currencyexchange.controller.ExchangeController\",\"log_source_method\":\"getCurrencyExchange\",\"log_source_line\":26},\"thread\":\"http-nio-8181-exec-4\"}"; i=$((i+1)); sleep 10; done' ]
+              'i=0; while true; do echo "I am Amsidh Lokhande"; i=$((i+1)); sleep 10; done' ]
