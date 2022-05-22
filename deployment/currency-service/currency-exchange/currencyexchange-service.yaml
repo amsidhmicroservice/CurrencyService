@@ -4,14 +4,14 @@ kind: Service
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   name: currency-exchange
 spec:
   ports:
-    - name: exchange-port
+    - name: tcp-exchange
       port: 8181
   selector:
     app: currency-exchange
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   sessionAffinity: ClientIP
   type: ClusterIP

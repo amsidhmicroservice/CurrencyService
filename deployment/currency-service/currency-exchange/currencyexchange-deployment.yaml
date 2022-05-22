@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   name: currency-exchange
   namespace: default
 spec:
@@ -21,14 +21,14 @@ spec:
     metadata:
       labels:
         app: currency-exchange
-        version: 1.1.0-JSON-EFK-SNAPSHOT
+        version: 1.1.1
     spec:
       containers:
-        - image: amsidhmicroservice/currency-exchange:1.1.0-JSON-EFK-SNAPSHOT
+        - image: amsidhmicroservice/kube-currency-exchange:1.1.1
           imagePullPolicy: Always
           name: currency-exchange
           ports:
-            - name: exchange-port
+            - name: tcp-exchange
               containerPort: 8181
           resources:
             requests:

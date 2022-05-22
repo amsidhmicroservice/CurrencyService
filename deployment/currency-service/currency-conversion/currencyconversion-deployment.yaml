@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   name: currency-conversion
   namespace: default
 spec:
@@ -21,14 +21,14 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 1.1.0-JSON-EFK-SNAPSHOT
+        version: 1.1.1
     spec:
       containers:
-        - image: amsidhmicroservice/currency-conversion:1.1.0-JSON-EFK-SNAPSHOT
+        - image: amsidhmicroservice/kube-currency-conversion:1.1.1
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
-            - name: conversionport
+            - name: tcp-conversion
               containerPort: 8282
           env:
             - name: CURRENCY_EXCHANGE_URL

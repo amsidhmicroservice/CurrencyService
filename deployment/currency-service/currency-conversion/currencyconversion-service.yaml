@@ -4,14 +4,14 @@ kind: Service
 metadata:
   labels:
     app: currency-conversion
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   name: currency-conversion
 spec:
   ports:
-    - name: conversionport
+    - name: tcp-conversion
       port: 8282
   selector:
     app: currency-conversion
-    version: 1.1.0-JSON-EFK-SNAPSHOT
+    version: 1.1.1
   sessionAffinity: ClientIP
   type: NodePort
