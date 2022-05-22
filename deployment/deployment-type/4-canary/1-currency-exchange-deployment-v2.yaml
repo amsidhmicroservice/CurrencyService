@@ -1,31 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: currency-exchange
-    version: 1.1.2
-  name: currency-exchange
+  name: currency-exchange-v2
   namespace: default
+  labels:
+    version: v2
 spec:
   replicas: 1
   minReadySeconds: 45
   selector:
     matchLabels:
       app: currency-exchange
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      version: v2
   template:
     metadata:
       labels:
         app: currency-exchange
-        version: 1.1.2
+        version: v2
     spec:
       containers:
         - image: amsidhmicroservice/kube-currency-exchange:1.1.2
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent #Always
           name: currency-exchange
           ports:
             - name: tcp-exchange

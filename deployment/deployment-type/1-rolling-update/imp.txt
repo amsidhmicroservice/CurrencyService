@@ -1,0 +1,2 @@
+Rolling update is the default deployment strategy.
+Iteration of % pod will get down and deployed until all pod will get switched to new deployment.

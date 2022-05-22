@@ -1,0 +1,2 @@
+Recreate strategy will delete all the existing pods and create them again during redeployment.
+Which is not good because the service will down until deployment complete.

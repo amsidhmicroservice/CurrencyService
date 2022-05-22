@@ -7,16 +7,13 @@ metadata:
   name: currency-exchange
   namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   minReadySeconds: 45
   selector:
     matchLabels:
       app: currency-exchange
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+    type: Recreate
   template:
     metadata:
       labels:

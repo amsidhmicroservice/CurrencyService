@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 1.1.1
+    version: 1.1.2
   name: currency-conversion
   namespace: default
 spec:
@@ -21,10 +21,10 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 1.1.1
+        version: 1.1.2
     spec:
       containers:
-        - image: amsidhmicroservice/kube-currency-conversion:1.1.1
+        - image: amsidhmicroservice/kube-currency-conversion:1.1.2
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:

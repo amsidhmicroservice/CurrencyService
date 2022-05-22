@@ -1,0 +1,4 @@
+Blue-Green with mirroring deployment strategy will keep at-least one version of the service
+running at given point of time. so this way the service will always running at-least one instance.
+
+We have one of the version live at a time. Either blue or green version
