@@ -33,7 +33,6 @@ spec:
           env:
             - name: CURRENCY_EXCHANGE_URL
               value: http://currency-exchange:8181
-
           resources:
             requests:
               memory: 512Mi

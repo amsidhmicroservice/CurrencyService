@@ -1,11 +1,12 @@
-Download Istio istio-1.11.3
+Download Istio istio-1.13.4
 
-cd istio-1.11.3
+cd istio-1.13.4
 export PATH=$PWD/bin:$PATH
 istioctl install --set profile=demo -y
 kubectl label namespace default istio-injection=enabled
 
 kubectl apply -f samples/addons
+kubectl apply -f samples/addons/extras
 kubectl rollout status deployment/kiali -n istio-system
 istioctl dashboard kiali
 
