@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
     <properties>
@@ -60,6 +60,17 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- OpenTracing dependencies-->
+        <dependency>
+            <groupId>io.opentracing.brave</groupId>
+            <artifactId>brave-opentracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+
 
     </dependencies>
     <dependencyManagement>

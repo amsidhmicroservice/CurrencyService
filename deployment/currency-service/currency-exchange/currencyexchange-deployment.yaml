@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.2
+    version: 1.1.0
   name: currency-exchange
   namespace: default
 spec:
@@ -21,15 +21,19 @@ spec:
     metadata:
       labels:
         app: currency-exchange
-        version: 1.1.2
+        version: 1.1.0
     spec:
       containers:
-        - image: amsidhmicroservice/kube-currency-exchange:1.1.2
+        - image: amsidhmicroservice/kube-currency-exchange:1.1.0
           imagePullPolicy: Always
           name: currency-exchange
           ports:
             - name: tcp-exchange
               containerPort: 8181
+          env:
+            - name: SPRING_ZIPKIN_BASE_URL
+              value: http://zipkin:9411
+
           resources:
             requests:
               memory: 512Mi

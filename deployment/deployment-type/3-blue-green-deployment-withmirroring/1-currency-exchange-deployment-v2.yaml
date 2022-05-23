@@ -19,7 +19,7 @@ spec:
         version: v2
     spec:
       containers:
-        - image: amsidhmicroservice/kube-currency-exchange:1.1.2
+        - image: amsidhmicroservice/kube-currency-exchange:1.1.0
           imagePullPolicy: IfNotPresent #Always
           name: currency-exchange
           ports:
