@@ -131,8 +131,8 @@ jobs:
           echo "Setup FluentD on GKE cluster"
           kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
           kubectl get all -n fluentd
-  deploy_currency_servide:
-    name: deploy_currency_servide
+  deploy_currency_service:
+    name: deploy_currency_service
     runs-on: ubuntu-latest
     needs: [ build_clean_install_push, deploy_istio, deploy_fluentd ]
     steps:
