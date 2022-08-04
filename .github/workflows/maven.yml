@@ -70,7 +70,7 @@ jobs:
           kubectl delete namespace istio-system --ignore-not-found=true --grace-period=10
 
           echo "Setup ISTIO on GKE cluster"
-          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -
+          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.14.3 TARGET_ARCH=x86_64 sh -
           cd istio-1.6.8
           export PATH=$PWD/bin:$PATH
           istioctl install --set profile=demo -y
