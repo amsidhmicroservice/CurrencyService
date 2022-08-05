@@ -67,14 +67,18 @@ jobs:
       - name: Deployment of the ISTIO to GKE Cluster
         run: |-
           echo "Delete ISTIO Setup"
-          kubectl delete namespace istio-system --ignore-not-found=true --grace-period=10
+          kubectl delete namespace istio-system --force --grace-period=0 --ignore-not-found=true
 
           echo "Setup ISTIO on GKE cluster"
-          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.14.3 TARGET_ARCH=x86_64 sh -
-          cd istio-1.14.3
+          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.14.1 TARGET_ARCH=x86_64 sh -
+          cd istio-1.14.1
+          echo "Setting Istion in classpath"
           export PATH=$PWD/bin:$PATH
+          echo "Install istio demo profile "
           istioctl install --set profile=demo -y
+          echo "Setting sidecar for default namespace"
           kubectl label namespace default istio-injection=enabled --overwrite=true
+          echo "Get all resources from istion-system namespace"
           kubectl get all -n istio-system
 
   deploy_ek_on_gke:
