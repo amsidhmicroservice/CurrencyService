@@ -55,7 +55,7 @@ jobs:
       - name: Checkout the project repository
         uses: actions/checkout@v2
       - name: Setup gcloud CLI and login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@main
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
@@ -84,7 +84,7 @@ jobs:
       - name: Checkout the project repository
         uses: actions/checkout@v2
       - name: Setup gcloud CLI and login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@main
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
@@ -109,7 +109,7 @@ jobs:
       - name: Checkout the project repository
         uses: actions/checkout@v2
       - name: Setup gcloud CLI and login to GCP
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@main
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
