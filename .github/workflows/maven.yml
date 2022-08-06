@@ -45,7 +45,6 @@ jobs:
   deploy_istio:
     name: deploy_istio
     runs-on: ubuntu-latest
-    needs: [ build_clean_install_push ]
     steps:
       - name: Setup gcloud CLI and login to GCP
         uses: google-github-actions/setup-gcloud@main
