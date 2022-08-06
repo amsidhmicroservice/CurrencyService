@@ -44,7 +44,7 @@ jobs:
         run: mvn -B clean install -P build-push,sonar --file pom.xml
 
       # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@master
+      - uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
