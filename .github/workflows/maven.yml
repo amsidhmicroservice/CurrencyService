@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: currencyservice-github-action
+name: currency-service-github-workflow
 
 on:
   workflow_dispatch:
@@ -26,25 +26,23 @@ jobs:
     steps:
       - name: Checkout the project repository
         uses: actions/checkout@v2
-
       - name: Setup Java 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
-
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           username: ${{env.DOCKER_USERNAME}}
           password: ${{env.DOCKER_PASSWORD}}
-
       - name: Maven Clean, Install, Docker Build, Push and SonarCloud
         run: mvn -B clean install -P build-push,sonar --file pom.xml
 
   deploy_istio:
     name: deploy_istio
     runs-on: ubuntu-latest
+    needs: [ build_clean_install_push ]
     steps:
       - name: Setup gcloud CLI and login to GCP
         uses: google-github-actions/setup-gcloud@v0
@@ -74,6 +72,7 @@ jobs:
           kubectl label namespace default istio-injection=enabled --overwrite=true
           kubectl get all -n istio-system
 
+
   deploy_ek_on_gke:
     name: deploy_ek_on_gke
     runs-on: ubuntu-latest
@@ -102,6 +101,7 @@ jobs:
           kubectl apply -f deployment/efk/elasticsearch-kibana/1-elastic-kibana-namespace.yaml,deployment/efk/elasticsearch-kibana/2-elastic-demo.yaml,deployment/efk/elasticsearch-kibana/3-kibana-demo.yaml
           kubectl get all -n elastic-kibana
 
+
   deploy_fluentd:
     name: deploy_fluentd
     runs-on: ubuntu-latest
@@ -128,10 +128,11 @@ jobs:
           kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
           kubectl get all -n fluentd
         continue-on-error: true
+
   deploy_currency_service:
     name: deploy_currency_service
     runs-on: ubuntu-latest
-    needs: [ build_clean_install_push, deploy_istio ]
+    needs: [ deploy_istio ]
     steps:
       - name: Checkout the project repository
         uses: actions/checkout@v2
