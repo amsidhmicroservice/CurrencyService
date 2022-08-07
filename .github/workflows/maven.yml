@@ -77,8 +77,11 @@ jobs:
           echo "Enabling Istio-Injection on default namespace"
           kubectl label namespace default istio-injection=enabled --overwrite=true
           kubectl get all -n istio-system
-
-
+      - name: Install Istio sample addon
+        run: |-
+          echo "Installing Istio sample addon"
+          kubectl apply -f samples/addons
+          
 
   deploy_currency_service_job:
     name: deploy_currency_service_job
