@@ -6,7 +6,7 @@ name: currency-service-github-workflow
 on:
   workflow_dispatch:
   schedule:
-    # * is a special character in YAML so you have to quote this string
+    # * is a special character in YAML, so you have to quote this string
     - cron: '30 17 * * *'
 
 env:
@@ -164,3 +164,4 @@ jobs:
           echo "Install Istio Gateway"
           kubectl apply -f deployment/gateway/istio
           kubectl get gateway -o wide
+
