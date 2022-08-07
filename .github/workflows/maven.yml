@@ -59,17 +59,18 @@ jobs:
       - name: Delete istio-system namespace from GKE Cluster
         run: |-
           echo "Delete ISTIO Setup"
-          kubectl delete namespace istio-system --ignore-not-found=true --grace-period=120000
+          kubectl delete namespace istio-system --ignore-not-found=true --grace-period=1200
       - name: Setting up istio mesh on GKE Cluster
         run: |-
           echo "Setup ISTIO on GKE cluster"
-          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -
-          cd istio-1.6.8
+          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.14.3 TARGET_ARCH=x86_64 sh -
+          cd istio-1.14.3
           export PATH=$PWD/bin:$PATH
           istioctl install --set profile=demo -y
-        continue-on-error: true
+          echo "Installing Istio demo profile successfully"
       - name: Enable istio-injection to default namespace
         run: |-
+          echo "Enabling Istio-Injection on default namespace"
           kubectl label namespace default istio-injection=enabled --overwrite=true
           kubectl get all -n istio-system
 
