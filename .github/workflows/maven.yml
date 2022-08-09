@@ -83,6 +83,13 @@ jobs:
           cd istio-1.14.3
           ls -al
           kubectl apply -f samples/addons
+      - name: Install Istio extra addon
+        run: |-
+          echo "Installing Istio extra addon"
+          cd istio-1.14.3
+          ls -al
+          kubectl apply -f samples/addons/extra
+          
           
 
   deploy_currency_service_job:
