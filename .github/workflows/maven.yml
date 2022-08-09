@@ -80,7 +80,6 @@ jobs:
       - name: Install Istio sample addon
         run: |-
           echo "Installing Istio sample addon"
-          cd istio-1.14.3
           ls -al
           kubectl apply -f samples/addons
       - name: Install Istio extra addon
