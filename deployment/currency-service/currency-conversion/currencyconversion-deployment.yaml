@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-conversion
-    version: 1.1.6-RELEASE
+    version: 1.1.0-SNAPSHOT
   name: currency-conversion
   namespace: default
 spec:
@@ -21,10 +21,10 @@ spec:
     metadata:
       labels:
         app: currency-conversion
-        version: 1.1.6-RELEASE
+        version: 1.1.0-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currency-conversion:1.1.6-RELEASE
+        - image: amsidhmicroservice/currency-conversion:1.1.0-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: currency-conversion
           ports:
@@ -33,10 +33,6 @@ spec:
           env:
             - name: CURRENCY_EXCHANGE_URL
               value: http://currency-exchange:8181
-            - name: TZ
-              value: "Asia/Kolkata"
-            - name: I18N_LOCALE
-              value: "as-IN"
 
           resources:
             requests:

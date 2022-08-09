@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: currency-exchange
-    version: 1.1.6-RELEASE
+    version: 1.1.0-SNAPSHOT
   name: currency-exchange
   namespace: default
 spec:
@@ -21,21 +21,15 @@ spec:
     metadata:
       labels:
         app: currency-exchange
-        version: 1.1.6-RELEASE
+        version: 1.1.0-SNAPSHOT
     spec:
       containers:
-        - image: amsidhmicroservice/currency-exchange:1.1.6-RELEASE
+        - image: amsidhmicroservice/currency-exchange:1.1.0-SNAPSHOT
           imagePullPolicy: Always
           name: currency-exchange
           ports:
             - name: exchange-port
               containerPort: 8181
-          env:
-            - name: TZ
-              value: "Asia/Kolkata"
-            - name: I18N_LOCALE
-              value: "as-IN"
-
           resources:
             requests:
               memory: 512Mi
