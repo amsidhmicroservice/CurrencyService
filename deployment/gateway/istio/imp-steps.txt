@@ -1,7 +1,3 @@
-Add correct service account while creating cluster. Select the default pool and security section while
-creating cluster.
-Make sure the selected service account must have owner and kubernetes-admin permission.
-
 Download Istio istio-1.11.3
 
 cd istio-1.11.3
