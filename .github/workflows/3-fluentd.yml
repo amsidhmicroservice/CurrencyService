@@ -1,0 +1,40 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: 3-fluentd-workflow
+
+on:
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+  GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}
+
+jobs:
+  deploy_fluentd_job:
+    name: deploy_fluentd_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+      - name: Deployment to the FluentD Cluster
+        run: |-
+          echo "Delete existing FluentD Setup"
+          kubectl delete namespace fluentd --ignore-not-found=true --grace-period=10
+
+          echo "Setup FluentD on GKE cluster"
+          kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
+          kubectl get all -n fluentd
+        continue-on-error: true
