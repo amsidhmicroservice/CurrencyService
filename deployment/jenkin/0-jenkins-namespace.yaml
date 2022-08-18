@@ -1,0 +1,5 @@
+# Jenkins Namespace Configuration
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-tools

@@ -44,7 +44,7 @@ class ConversionControllerTest {
         log.info("Evaluate the response");
         //Evaluate the response
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(response.getContentAsString(),"{status:up}");
+        Assertions.assertEquals("{status:up}", response.getContentAsString());
     }
 
     @Test

@@ -1,0 +1,93 @@
+---
+
+# Jenkins Deployment Configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jenkins
+    version: latest
+  name: jenkins
+  namespace: devops-tools
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: jenkins-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jenkins-server
+        version: latest
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      serviceAccountName: jenkins-admin
+      containers:
+        - image: jenkins/jenkins:latest
+          imagePullPolicy: Always
+          name: jenkins
+          ports:
+            - name: httpport
+              containerPort: 8080
+            - name: jnlpport
+              containerPort: 50000
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 1024Mi
+          livenessProbe:
+            httpGet:
+              path: "/login"
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: "/login"
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: jenkins-pv-storage
+              mountPath: "/var/jenkins_home"
+
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 50
+      volumes:
+        - name: jenkins-pv-storage
+          persistentVolumeClaim:
+            claimName: jenkins-pv-claim
+---
+#Jenkins Service Configuration
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jenkins-service
+    version: latest
+  name: jenkins-service
+  namespace: devops-tools
+spec:
+  ports:
+    - name: web-port
+      port: 8080
+    - name: agent-port
+      port: 50000
+  selector:
+    app: jenkins-server
+    version: latest
+  sessionAffinity: ClientIP
+  type: LoadBalancer

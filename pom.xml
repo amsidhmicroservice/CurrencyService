@@ -124,7 +124,6 @@
             </activation>
             <properties>
                 <docker.image.prefix>amsidhmicroservice</docker.image.prefix>
-                <!--<docker.image.prefix>gcr.io/spring-boot-project-325700</docker.image.prefix>-->
                 <docker.image.name>${project.artifactId}</docker.image.name>
             </properties>
             <build>
