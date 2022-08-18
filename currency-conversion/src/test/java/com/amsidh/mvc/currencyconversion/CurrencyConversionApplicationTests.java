@@ -23,7 +23,7 @@ class CurrencyConversionApplicationTests {
     @Test
     void contextLoads() {
         assertNotNull(conversionController);
-        Assertions.assertNotNull(instanceInformationService);
+        assertNotNull(instanceInformationService);
     }
 
 }

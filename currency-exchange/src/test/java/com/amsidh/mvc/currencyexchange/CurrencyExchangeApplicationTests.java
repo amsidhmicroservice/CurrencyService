@@ -7,9 +7,10 @@ import com.amsidh.mvc.currencyexchange.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @SpringBootTest
 class CurrencyExchangeApplicationTests {
 
