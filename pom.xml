@@ -20,11 +20,6 @@
         <spring-cloud.version>2020.0.3</spring-cloud.version>
 
         <docker.skip>true</docker.skip>
-
-        <sonar.sources>.</sonar.sources>
-        <sonar.inclusions>pom.xml,/pom.xml,src/main/**,/src/test/**</sonar.inclusions>
-
-
     </properties>
 
     <dependencies>
@@ -71,7 +66,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>6.6</version>
+            <version>7.2</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -124,7 +119,6 @@
             </activation>
             <properties>
                 <docker.image.prefix>amsidhmicroservice</docker.image.prefix>
-                <!--<docker.image.prefix>gcr.io/spring-boot-project-325700</docker.image.prefix>-->
                 <docker.image.name>${project.artifactId}</docker.image.name>
             </properties>
             <build>
@@ -176,18 +170,24 @@
             </activation>
             <properties>
                 <!-- Sonar Properties-->
-                <sonar.sources>.</sonar.sources>
-                <sonar.inclusions>pom.xml,/pom.xml,src/main/**</sonar.inclusions>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
                 <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
                 <sonar.organization>amsidhmicroservice</sonar.organization>
+
+                <sonar.sources>src/main/java</sonar.sources>
+                <sonar.tests>src/test/java</sonar.tests>
+                <sonar.log.level>TRACE</sonar.log.level>
+                <sonar.verbose>true</sonar.verbose>
+                <sonar.scm.forceReloadAll>false</sonar.scm.forceReloadAll>
+                <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+
             </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
+                        <version>3.9.1.2184</version>
                         <executions>
                             <execution>
                                 <id>sonar-cloud</id>
