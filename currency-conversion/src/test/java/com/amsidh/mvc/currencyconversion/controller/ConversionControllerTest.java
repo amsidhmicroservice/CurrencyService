@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 
@@ -44,7 +45,7 @@ class ConversionControllerTest {
         log.info("Evaluate the response");
         //Evaluate the response
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals(response.getContentAsString(),"{status:up}");
+        Assertions.assertEquals("{status:up}", response.getContentAsString());
     }
 
     @Test
@@ -67,7 +68,8 @@ class ConversionControllerTest {
 
         Exchange exchange = getExchange();
 
-        Mockito.when(restTemplate.getForEntity("http://localhost:8181/currency-exchange/USD/to/INR", Exchange.class))
+        UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString("http://localhost:8181/currency-exchange/{currencyFrom}/to/{currencyTo}");
+        Mockito.when(restTemplate.getForEntity(currencyExchangeURL.build("USD", "INR"), Exchange.class))
                 .thenReturn(new ResponseEntity<>(exchange, HttpStatus.OK));
 
         String conversionEnvironmentInfo = "0.0.3-SNAPSHOT : currency-conversion-7f75b4b757-ghcxk";
@@ -91,8 +93,8 @@ class ConversionControllerTest {
     @Test
     void testConvertCurrencyWithExchangeServiceDown() throws Exception {
 
-
-        Mockito.when(restTemplate.getForEntity("http://localhost:8181/currency-exchange/USD/to/INR", Exchange.class))
+        UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString("http://localhost:8181/currency-exchange/{currencyFrom}/to/{currencyTo}");
+        Mockito.when(restTemplate.getForEntity(currencyExchangeURL.build("USD", "INR"), Exchange.class))
                 .thenReturn(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 
         String conversionEnvironmentInfo = "0.0.3-SNAPSHOT : currency-conversion-7f75b4b757-ghcxk";

@@ -42,9 +42,6 @@ public class ConversionController {
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
         log.info("=======================================Start Request================================================");
         log.info("Inside convertCurrency method of ConversionController!!!");
-        String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
-        log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
-
         UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString(currencyExchangeUrl + "/currency-exchange/{currencyFrom}/to/{currencyTo}");
         Exchange exchange = restTemplate.getForEntity(currencyExchangeURL.build(currencyFrom, currencyTo), Exchange.class).getBody();
 
