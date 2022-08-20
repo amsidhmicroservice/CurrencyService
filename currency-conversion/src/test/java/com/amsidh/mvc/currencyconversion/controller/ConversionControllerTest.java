@@ -1,7 +1,7 @@
 package com.amsidh.mvc.currencyconversion.controller;
 
 import com.amsidh.mvc.currencyconversion.client.response.Exchange;
-import com.amsidh.mvc.currencyconversion.service.InstanceInformationService;
+import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

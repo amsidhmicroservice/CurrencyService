@@ -1,9 +1,8 @@
 package com.amsidh.mvc.currencyexchange.controller;
 
 import com.amsidh.mvc.currencyexchange.entity.Exchange;
-import com.amsidh.mvc.currencyexchange.exception.MyCustomException;
 import com.amsidh.mvc.currencyexchange.repository.ExchangeRepository;
-import com.amsidh.mvc.currencyexchange.service.InstanceInformationService;
+import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -38,13 +37,6 @@ public class ExchangeController {
         log.info("Returning the response from currency-conversion service");
         log.info("=======End Request=======");
         return exchange;
-    }
-
-
-    @GetMapping(value = "/exception", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String throwException(){
-        instanceInformationService.throwException();
-        return "This message won't return to the caller as it throws exception in the service method call";
     }
 
 }

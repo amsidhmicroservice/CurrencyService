@@ -103,6 +103,7 @@
     </build>
 
     <modules>
+        <module>common</module>
         <module>currency-exchange</module>
         <module>currency-conversion</module>
     </modules>

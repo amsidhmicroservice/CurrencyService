@@ -3,7 +3,7 @@
 package com.amsidh.mvc.currencyconversion;
 
 import com.amsidh.mvc.currencyconversion.controller.ConversionController;
-import com.amsidh.mvc.currencyconversion.service.InstanceInformationService;
+import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
