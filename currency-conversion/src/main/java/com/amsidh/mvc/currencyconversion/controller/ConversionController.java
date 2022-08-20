@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 
@@ -43,7 +44,9 @@ public class ConversionController {
         log.info("Inside convertCurrency method of ConversionController!!!");
         String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
         log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
-        Exchange exchange = restTemplate.getForEntity(currencyExchangeUrlFullPath, Exchange.class).getBody();
+
+        UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString(currencyExchangeUrl + "/currency-exchange/{currencyFrom}/to/{currencyTo}");
+        Exchange exchange = restTemplate.getForEntity(currencyExchangeURL.build(currencyFrom, currencyTo), Exchange.class).getBody();
 
         CurrencyConversionResponse.CurrencyConversionResponseBuilder builder = CurrencyConversionResponse.builder()
                 .from(currencyFrom)
