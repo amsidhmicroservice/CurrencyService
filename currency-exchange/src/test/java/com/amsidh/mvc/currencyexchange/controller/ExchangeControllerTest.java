@@ -70,7 +70,7 @@ public class ExchangeControllerTest {
 
         log.info("Created the request");
         //Created the request
-        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.get("/currency-exchange/{currencyFrom}/to/{currencyTo}", "USD", "INR", 100);
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.get("/currency-exchange/{currencyFrom}/to/{currencyTo}", "USD", "INR");
         log.info("Call the API and get the response");
         //Call the API and get the response
         MockHttpServletResponse response = mockMvc.perform(mockHttpServletRequestBuilder).andReturn().getResponse();
@@ -95,22 +95,13 @@ public class ExchangeControllerTest {
         Mockito.when(exchangeRepository.findExchangeByCurrencyFromAndCurrencyTo("YSD", "PNR")).thenReturn(null);
         log.info("Created the request");
         //Created the request
-        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.get("/currency-exchange/{currencyFrom}/to/{currencyTo}", "USD", "INR", 100);
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.get("/currency-exchange/{currencyFrom}/to/{currencyTo}", "USD", "INR");
         log.info("Call the API and get the response");
         //Call the API and get the response
         MockHttpServletResponse response = mockMvc.perform(mockHttpServletRequestBuilder).andReturn().getResponse();
         log.info("Evaluate the response");
         //Evaluate the response
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertNotNull(response.getContentAsString());
-        JsonAssertions.assertJson(response.getContentAsString()).at("/description").isText("uri=/currency-exchange/USD/to/INR");
-        JsonAssertions.assertJson(response.getContentAsString()).at("/message").isText("Currency not found");
-        JsonAssertions.assertJson(response.getContentAsString()).at("/statusCode").isNumberEqualTo(400);
-        JsonAssertions.assertJson(response.getContentAsString())
-                .isNotNull()
-                .isNotNumber()
-                .isObject()
-                .containsKeys("description", "message", "statusCode", "timestamp");
 
     }
 
