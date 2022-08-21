@@ -1,6 +1,7 @@
 package com.amsidh.mvc.currencyexchange.controller;
 
 import com.amsidh.mvc.currencyexchange.entity.Exchange;
+import com.amsidh.mvc.currencyexchange.exception.MyCustomException;
 import com.amsidh.mvc.currencyexchange.repository.ExchangeRepository;
 import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,9 @@ public class ExchangeController {
         log.info("=======Start Request=======");
         log.info("Inside getCurrencyExchange method of ExchangeRepository");
         Exchange exchange = exchangeRepository.findExchangeByCurrencyFromAndCurrencyTo(currencyFrom, currencyTo);
+        if (null == exchange) {
+            throw new MyCustomException("Currency not found");
+        }
         exchange.setExchangeEnvironmentInfo(instanceInformationService.retrieveInstanceInfo());
         log.info("Returning the response from currency-conversion service");
         log.info("=======End Request=======");

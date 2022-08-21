@@ -11,7 +11,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
-import static com.amsidh.mvc.currencyexchange.exception.ErrorMessage.builder;
 
 @RestControllerAdvice
 public class ExchangeAdviceController {
@@ -19,7 +18,7 @@ public class ExchangeAdviceController {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        return builder()
+        return ErrorMessage.builder()
                 .description(request.getDescription(false))
                 .message(ex.getMessage())
                 .statusCode(HttpStatus.NOT_FOUND.value())
@@ -30,7 +29,7 @@ public class ExchangeAdviceController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
-        return builder()
+        return ErrorMessage.builder()
                 .description(request.getDescription(false))
                 .message(ex.getMessage())
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -41,7 +40,7 @@ public class ExchangeAdviceController {
     @ExceptionHandler(MyCustomException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage resourceNotFoundException(MyCustomException ex, WebRequest request) {
-        return builder()
+        return ErrorMessage.builder()
                 .description(request.getDescription(false))
                 .message(ex.getMessage())
                 .statusCode(HttpStatus.BAD_REQUEST.value())

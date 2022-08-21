@@ -19,7 +19,7 @@ public class InstanceInformationServiceImpl implements InstanceInformationServic
 
     @Override
     public String retrieveInstanceInfo() {
-        log.debug("Inside retrieveInstanceInfo method of InstanceInformationService in currency-conversion service " + projectVersion + " : " + nodeName);
+        log.debug("Inside retrieveInstanceInfo method of InstanceInformationService in service " + projectVersion + " : " + nodeName);
         return projectVersion + " : " + nodeName;
     }
 }

@@ -36,7 +36,6 @@ public class ConversionController {
         return "{status:up}";
     }
 
-
     //http://35.222.88.162:8282/currency-conversion/from/USD/to/INR/quantity/100
     @GetMapping(value = {"/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
