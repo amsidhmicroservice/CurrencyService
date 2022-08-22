@@ -123,9 +123,8 @@
             </activation>
             <properties>
                 <!-- Sonar Properties-->
-                <sonar.sources>.</sonar.sources>
-                <sonar.inclusions>src/main/**</sonar.inclusions>
-                <sonar.test.inclusions>src/test/**</sonar.test.inclusions>
+                <sourceDirectory>${basedir}/src/main</sourceDirectory>
+                <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
                 <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
                 <sonar.organization>amsidhmicroservice</sonar.organization>
@@ -135,6 +134,9 @@
                 <sonar.log.level>TRACE</sonar.log.level>
                 <sonar.verbose>true</sonar.verbose>
                 <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+
+                <sonar.tsql.file.suffixes>sql,tsql</sonar.tsql.file.suffixes>
+                <sonar.plsql.file.suffixes>pks,pkb</sonar.plsql.file.suffixes>
 
             </properties>
             <build>
