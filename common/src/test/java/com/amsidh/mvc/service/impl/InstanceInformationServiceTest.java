@@ -15,6 +15,6 @@ public class InstanceInformationServiceTest {
     public void retrieveInstanceInfoTest() {
         String instanceInfo = this.instanceInformationService.retrieveInstanceInfo();
         Assertions.assertNotNull(instanceInfo);
-        Assertions.assertTrue(instanceInfo.contains("NoVersion : NodeTest"));
+        Assertions.assertTrue(instanceInfo.contains("NoVersion : local"));
     }
 }

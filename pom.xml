@@ -122,6 +122,7 @@
                 <file>
                     <exists>Dockerfile</exists>
                 </file>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <docker.image.prefix>amsidhmicroservice</docker.image.prefix>
@@ -173,7 +174,7 @@
         <profile>
             <id>sonar</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
                 <!-- Sonar Properties-->
@@ -181,7 +182,7 @@
                 <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
                 <sonar.organization>amsidhmicroservice</sonar.organization>
-
+                <sonar.login></sonar.login>
                 <sonar.scm.disabled>true</sonar.scm.disabled>
                 <sonar.scm.provider>git</sonar.scm.provider>
                 <sonar.log.level>TRACE</sonar.log.level>
