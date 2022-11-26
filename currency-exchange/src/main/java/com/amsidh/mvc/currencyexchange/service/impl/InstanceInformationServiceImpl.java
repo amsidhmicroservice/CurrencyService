@@ -1,10 +1,12 @@
 package com.amsidh.mvc.currencyexchange.service.impl;
 
-import com.amsidh.mvc.currencyexchange.exception.MyCustomException;
-import com.amsidh.mvc.currencyexchange.service.InstanceInformationService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.amsidh.mvc.currencyexchange.exception.MyCustomException;
+import com.amsidh.mvc.currencyexchange.service.InstanceInformationService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j

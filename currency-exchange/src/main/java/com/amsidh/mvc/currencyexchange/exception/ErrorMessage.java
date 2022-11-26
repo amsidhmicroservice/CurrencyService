@@ -1,9 +1,9 @@
 package com.amsidh.mvc.currencyexchange.exception;
 
+import java.util.Date;
+
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 @Builder

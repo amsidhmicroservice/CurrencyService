@@ -1,8 +1,12 @@
 package com.amsidh.mvc.currencyexchange.exception;
 
-public class MyCustomException extends RuntimeException {
+import java.io.Serializable;
 
-    public MyCustomException(String message) {
+public class MyCustomException extends RuntimeException implements Serializable {
+
+	private static final long serialVersionUID = 271673332397719853L;
+
+	public MyCustomException(String message) {
         super(message);
     }
 }
