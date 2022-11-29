@@ -2,9 +2,53 @@ server:
   port: 8888
 
 spring:
+  profiles:
+    include:
+      - common
+    active:
+      - dev
+  application:
+    name: springboot-admin-ui
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
   boot:
     admin:
       ui:
-        title: Currency-Service-Monitoring
+        title: Currency Service
         brand: Currency-Service
-      
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - uat
+  boot:
+    admin:
+      ui:
+        title: Currency Service
+        brand: Currency-Service
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - prod
+  boot:
+    admin:
+      ui:
+        title: Currency Service
+        brand: Currency-Service
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - test

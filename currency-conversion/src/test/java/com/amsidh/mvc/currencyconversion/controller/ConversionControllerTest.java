@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @WebMvcTest(ConversionController.class)
+@ActiveProfiles("test")
 class ConversionControllerTest {
 
     private final MockMvc mockMvc;

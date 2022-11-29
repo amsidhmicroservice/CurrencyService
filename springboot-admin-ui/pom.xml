@@ -14,7 +14,7 @@
     <name>springboot-admin-ui</name>
     <description>Springboot-Admin-UI project for Spring Boot project for Spring Boot</description>
     <properties>
-        <docker.skip>true</docker.skip>
+        <docker.skip>false</docker.skip>
     </properties>
 
     <dependencies>
