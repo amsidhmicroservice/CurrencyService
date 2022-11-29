@@ -5,52 +5,36 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
-        <relativePath/>
+        <version>3.0.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.amsidh.mvc</groupId>
-    <artifactId>currency-service</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <artifactId>currencyservice</artifactId>
     <packaging>pom</packaging>
-    <description>Currency-Service project for Spring Boot</description>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>currencyservice</name>
+    <description>Currency-Service project for Spring Boot project for Spring Boot</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
-
+        <java.version>19</java.version>
         <docker.skip>true</docker.skip>
+        <spring-boot-admin.version>3.0.0-M4</spring-boot-admin.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
 
-        <!-- This kubernetes-all library is optional. This will help you to print all available kubernetes object in log during deployment-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-all</artifactId>
-            <version>1.1.10.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -66,25 +50,26 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>6.6</version>
+            <version>7.2</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+        <!-- -->
         <dependency>
             <groupId>uk.org.webcompere</groupId>
             <artifactId>model-assert</artifactId>
             <version>1.0.0</version>
-            <scope>test</scope>
         </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-dependencies</artifactId>
+                <version>${spring-boot-admin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -106,15 +91,13 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
-
     <modules>
         <module>common</module>
         <module>currency-exchange</module>
         <module>currency-conversion</module>
+        <module>springboot-admin-ui</module>
     </modules>
-
     <profiles>
         <profile>
             <id>build-push</id>
@@ -128,13 +111,15 @@
                 <docker.image.prefix>amsidhmicroservice</docker.image.prefix>
                 <!--<docker.image.prefix>gcr.io/spring-boot-project-325700</docker.image.prefix>-->
                 <docker.image.name>${project.artifactId}</docker.image.name>
+                <docker.username>amsidhmicroservice</docker.username>
+                <docker.password>Shirashel@123</docker.password>
             </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.35.0</version>
+                        <version>0.38.1</version>
                         <configuration>
                             <verbose>true</verbose>
                             <images>
@@ -170,11 +155,10 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>sonar</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <!-- Sonar Properties-->
@@ -198,7 +182,7 @@
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
+                        <version>3.9.1.2184</version>
                         <executions>
                             <execution>
                                 <id>sonar-cloud</id>
@@ -212,12 +196,12 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.2</version>
+                        <version>3.0.0-M7</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.22.2</version>
+                        <version>3.0.0-M7</version>
                         <executions>
                             <execution>
                                 <id>integration-test</id>
@@ -230,7 +214,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.5</version>
+                        <version>0.8.8</version>
                         <executions>
                             <execution>
                                 <id>prepare-and-report</id>

@@ -1,0 +1,10 @@
+server:
+  port: 8888
+
+spring:
+  boot:
+    admin:
+      ui:
+        title: Currency-Service-Monitoring
+        brand: Currency-Service
+      

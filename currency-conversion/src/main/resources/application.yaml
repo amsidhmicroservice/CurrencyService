@@ -1,5 +1,18 @@
+server:
+  port: 8282
+
 spring:
   profiles:
     include:
       - common
+---
+spring:
+  application:
+    name: currency-conversion
 
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888
+        instance:
+          prefer-ip: true

@@ -25,21 +25,12 @@
                         }
                     </pattern>
                 </pattern>
-
-                <loggerName>
-                    <fieldName>logger</fieldName>
-                </loggerName>
                 <logLevel>
                     <fieldName>severity</fieldName>
                 </logLevel>
-                <pattern>
-                    <omitEmptyFields>true</omitEmptyFields>
-                    <pattern>
-                        {
-                        "logMessage": "%message"
-                        }
-                    </pattern>
-                </pattern>
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
                 <callerData>
                     <fieldName>log_class_info</fieldName>
                     <classFieldName>log_source_class</classFieldName>
@@ -54,6 +45,15 @@
                 <arguments>
                     <includeNonStructuredArguments>true</includeNonStructuredArguments>
                 </arguments>
+                <logstashMarkers/>
+                <pattern>
+                    <omitEmptyFields>true</omitEmptyFields>
+                    <pattern>
+                        {
+                        "logMessage": "%message"
+                        }
+                    </pattern>
+                </pattern>
                 <stackHash>
                     <fieldName>exception-hash</fieldName>
                 </stackHash>
@@ -66,7 +66,7 @@
                         <rootCauseFirst>true</rootCauseFirst>
                     </throwableConverter>
                 </stackTrace>
-                <logstashMarkers/>
+
             </providers>
         </encoder>
     </appender>
