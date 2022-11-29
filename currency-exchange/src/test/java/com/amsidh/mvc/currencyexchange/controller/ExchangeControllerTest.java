@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @WebMvcTest(ExchangeController.class)
 @ActiveProfiles("test")
-public class ExchangeControllerTest {
+class ExchangeControllerTest {
     private final MockMvc mockMvc;
     @MockBean
     private InstanceInformationService instanceInformationService;

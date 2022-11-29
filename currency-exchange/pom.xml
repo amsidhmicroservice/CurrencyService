@@ -11,7 +11,7 @@
     <description>Currency-Exchange project for Spring Boot</description>
     <properties>
         <spring-boot-admin.version>3.0.0-M4</spring-boot-admin.version>
-        <docker.skip>false</docker.skip>
+        <docker.skip>true</docker.skip>
     </properties>
     <dependencies>
         <dependency>
