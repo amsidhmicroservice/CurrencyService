@@ -11,7 +11,8 @@ import java.math.BigDecimal;
 @ToString
 @EqualsAndHashCode
 public class Exchange implements Serializable {
-    private Long id;
+	private static final long serialVersionUID = -1305554216968338247L;
+	private Long id;
     private String currencyFrom;
     private String currencyTo;
     private BigDecimal conversionMultiple;

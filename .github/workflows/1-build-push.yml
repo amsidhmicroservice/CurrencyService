@@ -17,15 +17,15 @@ jobs:
     steps:
       - name: Checkout the project repository
         uses: actions/checkout@v2
-      - name: Setup Java 11
-        uses: actions/setup-java@v2
+      - name: Setup Java 19
+        uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: '19'
+          distribution: 'temurin'
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           username: ${{env.DOCKER_USERNAME}}
           password: ${{env.DOCKER_PASSWORD}}
       - name: Maven Clean, Install, Docker Build, Push and SonarCloud
-        run: mvn -B clean install -P build-push,sonar --file pom.xml
+        run: mvn -B clean install -Dsonar.login=${{secrets.SONAR_TOKEN}}  -P build-push,sonar --file pom.xml

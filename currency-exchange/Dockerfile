@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-slim
+FROM openjdk:19-jdk-alpine
 VOLUME /tmp
 COPY /target/currency-exchange-*.jar currencyexchange.jar
 COPY src src

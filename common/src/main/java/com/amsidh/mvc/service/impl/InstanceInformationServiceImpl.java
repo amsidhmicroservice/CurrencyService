@@ -1,6 +1,6 @@
-package com.amsidh.mvc.currencyconversion.service.impl;
+package com.amsidh.mvc.service.impl;
 
-import com.amsidh.mvc.currencyconversion.service.InstanceInformationService;
+import com.amsidh.mvc.service.InstanceInformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,8 @@ public class InstanceInformationServiceImpl implements InstanceInformationServic
 
     @Override
     public String retrieveInstanceInfo() {
-        log.debug("Inside retrieveInstanceInfo method of InstanceInformationService in currency-conversion service " + projectVersion + " : " + nodeName);
+        log.debug("Inside retrieveInstanceInfo method of InstanceInformationService in service " + projectVersion + " : " + nodeName);
         return projectVersion + " : " + nodeName;
     }
 }
+
