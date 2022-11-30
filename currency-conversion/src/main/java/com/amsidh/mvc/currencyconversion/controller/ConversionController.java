@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 
-import static net.logstash.logback.argument.StructuredArguments.kv;
+import static net.logstash.logback.argument.StructuredArguments.v;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -43,10 +44,11 @@ public class ConversionController {
     public CurrencyConversionResponse convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
         log.info("=======================================Start Request================================================");
         log.info("Inside convertCurrency method of ConversionController!!!");
-        Long requestStartTime = System.currentTimeMillis();
+        long requestStartTime = System.currentTimeMillis();
         UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString(currencyExchangeUrl + "/currency-exchange/{currencyFrom}/to/{currencyTo}");
-        Exchange exchange = restTemplate.getForEntity(currencyExchangeURL.build(currencyFrom, currencyTo), Exchange.class).getBody();
-        log.info("Remote currency-exchange service is called", kv("RemoteServiceUrl", currencyExchangeURL.build().getPath()), kv("TimeTaken", (System.currentTimeMillis() - requestStartTime)));
+        ResponseEntity<Exchange> responseEntity = restTemplate.getForEntity(currencyExchangeURL.build(currencyFrom, currencyTo), Exchange.class);
+        Exchange exchange = responseEntity.getBody();
+        log.info("Currency-exchange service url {} is completed in {}ms with status {}", v("RemoteServiceUrl", currencyExchangeURL.build().getPath()), v("TimeTaken", (System.currentTimeMillis() - requestStartTime)), v("status", responseEntity.getStatusCode().value()));
 
         CurrencyConversionResponse.CurrencyConversionResponseBuilder builder = CurrencyConversionResponse.builder()
                 .from(currencyFrom)

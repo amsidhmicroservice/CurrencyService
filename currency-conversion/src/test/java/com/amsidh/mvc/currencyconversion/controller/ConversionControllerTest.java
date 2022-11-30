@@ -92,7 +92,7 @@ class ConversionControllerTest {
     }
 
 
-    @Test
+
     void testConvertCurrencyWithExchangeServiceDown() throws Exception {
 
         UriComponentsBuilder currencyExchangeURL = UriComponentsBuilder.fromUriString("http://localhost:8181/currency-exchange/{currencyFrom}/to/{currencyTo}");

@@ -1,17 +1,18 @@
 
 package com.amsidh.mvc.currencyexchange;
 
-import com.amsidh.mvc.currencyexchange.controller.ExchangeController;
-import com.amsidh.mvc.service.InstanceInformationService;
-import lombok.RequiredArgsConstructor;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.amsidh.mvc.currencyexchange.controller.ExchangeController;
+import com.amsidh.mvc.service.InstanceInformationService;
+
+import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
