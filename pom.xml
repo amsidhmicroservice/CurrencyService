@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.amsidh.mvc</groupId>
     <artifactId>currency-service</artifactId>
-    <version>0.0.3-helm-SNAPSHOT</version>
+    <version>0.0.4-helm-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Currency-Service project for Spring Boot</description>
     <properties>

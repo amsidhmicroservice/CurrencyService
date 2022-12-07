@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.amsidh.mvc</groupId>
         <artifactId>currency-service</artifactId>
-        <version>0.0.3-helm-SNAPSHOT</version>
+        <version>0.0.4-helm-SNAPSHOT</version>
     </parent>
     <artifactId>currency-exchange</artifactId>
     <description>Currency-Exchange project for Spring Boot</description>
     <properties>
-        <docker.skip>true</docker.skip>
+        <docker.skip>false</docker.skip>
     </properties>
     <dependencies>
         <dependency>
