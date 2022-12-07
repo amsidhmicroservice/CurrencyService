@@ -1,22 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.amsidh.mvc</groupId>
-        <artifactId>currency-service</artifactId>
-        <version>1.1.6-RELEASE</version>
+        <artifactId>currencyservice</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>currency-conversion</artifactId>
+    <name>currency-conversion</name>
     <description>Currency-Conversion project for Spring Boot</description>
     <properties>
-        <docker.skip>false</docker.skip>
+        <docker.skip>true</docker.skip>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.amsidh.mvc</groupId>
             <artifactId>common</artifactId>
-            <version>1.1.6-RELEASE</version>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
         </dependency>
     </dependencies>
 </project>

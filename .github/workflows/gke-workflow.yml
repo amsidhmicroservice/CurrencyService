@@ -1,0 +1,184 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: gke-workflow
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    # * is a special character in YAML, so you have to quote this string
+    # Runs at 17:30 UTC every day.
+    - cron: '30 17 * * *'
+    # Run on every 5 minutes
+    #- cron: '0 0 * * 0'
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+  GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}
+  GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+
+jobs:
+  build_clean_install_push_job:
+    name: build_clean_install_push_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup Java 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{env.DOCKER_USERNAME}}
+          password: ${{env.DOCKER_PASSWORD}}
+      - name: Maven Clean, Install, Docker Build, Push and SonarCloud
+        run: mvn -B clean install -P build-push,sonar --file pom.xml
+  deploy_istio_job:
+    name: deploy_istio_job
+    runs-on: ubuntu-latest
+    needs: [   build_clean_install_push_job ]
+    steps:
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+      - name: Delete istio-system namespace from GKE Cluster
+        run: |-
+          echo "Delete ISTIO Setup"
+          kubectl delete namespace istio-system --ignore-not-found=true --grace-period=1200
+      - name: Setting up istio mesh on GKE Cluster
+        run: |-
+          echo "Setup ISTIO on GKE cluster"
+          curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.14.3 TARGET_ARCH=x86_64 sh -
+          cd istio-1.14.3
+          export PATH=$PWD/bin:$PATH
+          istioctl install --set profile=demo -y
+          echo "Installing Istio demo profile successfully"
+      - name: Enable istio-injection to default namespace
+        run: |-
+          echo "Enabling Istio-Injection on default namespace"
+          kubectl label namespace default istio-injection=enabled --overwrite=true
+          kubectl get all -n istio-system
+      - name: Install Istio sample addon
+        run: |-
+          echo "Installing Istio sample addon"
+          cd istio-1.14.3
+          ls -al
+          kubectl apply -f samples/addons
+      - name: Install Istio extra addon
+        run: |-
+          echo "Installing Istio extra addon"
+          cd istio-1.14.3
+          ls -al
+          kubectl apply -f samples/addons/extras
+        continue-on-error: true
+
+  deploy_currency_service_job:
+    name: deploy_currency_service_job
+    runs-on: ubuntu-latest
+    needs: [ deploy_istio_job, deploy_fluentd_job ]
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+
+      - name: Delete existing Currency-Service if present on GKE Cluster
+        run: |-
+          echo "Delete Currency-Service Setup"
+          kubectl delete -f deployment/currency-service/currency-conversion,deployment/currency-service/currency-exchange,deployment/efk/fluentd/5-counter.yaml --ignore-not-found=true --grace-period=10
+
+          echo "Delete Gateway"
+          kubectl delete -f deployment/gateway/istio --ignore-not-found=true --grace-period=10
+
+      - name: Deploy Currency-Service on GKE Cluster
+        run: |-
+          kubectl get namespaces
+          kubectl apply -f deployment/currency-service/currency-exchange,deployment/currency-service/currency-conversion,deployment/efk/fluentd/5-counter.yaml
+          kubectl get services -o wide
+
+          echo "Install Istio Gateway"
+          kubectl apply -f deployment/gateway/istio
+          kubectl get gateway -o wide
+
+
+  deploy_ek_on_gke_job:
+    name: deploy_ek_on_gke_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Access GKE Cluster
+        run: |-
+          echo "Display GCP account details"
+          gcloud info
+          echo "Access to GKE Cluster"
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+
+      - name: Deployment ElasticSearch And Kibana to the GKE Cluster
+        run: |-
+          echo "Delete exiting ElasticSearch And Kibana deployment"
+          kubectl delete namespace elastic-kibana --ignore-not-found=true --grace-period=10
+
+          echo "Deploy ElasticSearch And Kibana on GKE cluster"
+          kubectl apply -f deployment/efk/elasticsearch-kibana/1-elastic-kibana-namespace.yaml,deployment/efk/elasticsearch-kibana/2-elastic-demo.yaml,deployment/efk/elasticsearch-kibana/3-kibana-demo.yaml
+          kubectl get all -n elastic-kibana
+
+  deploy_fluentd_job:
+    name: deploy_fluentd_job
+    runs-on: ubuntu-latest
+    needs: [ deploy_ek_on_gke_job ]
+    steps:
+      - name: Checkout the project repository
+        uses: actions/checkout@v2
+      - name: Setup gcloud CLI and login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+      - name: Display GCP information
+        run: |-
+          gcloud info
+          gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --zone "$GKE_ZONE"
+      - name: Deployment to the FluentD Cluster
+        run: |-
+          echo "Delete existing FluentD Setup"
+          kubectl delete namespace fluentd --ignore-not-found=true --grace-period=10
+
+          echo "Setup FluentD on GKE cluster"
+          kubectl apply -f deployment/efk/fluentd/1-fluentd-namespace.yaml,deployment/efk/fluentd/2-fluentd-rbac.yaml,deployment/efk/fluentd/3-fluentd-configmap.yaml,deployment/efk/fluentd/4-fluentd.yaml
+          kubectl get all -n fluentd
+        continue-on-error: true
