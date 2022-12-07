@@ -5,15 +5,13 @@ metadata:
 build:
   artifacts:
     - image: amsidhmicroservice/currencyconversion
-      context: currencyconversion
+      context: currency-conversion
       docker: { }
     - image: amsidhmicroservice/currencyexchange
-      context: currencyexchange
+      context: currency-exchange
       docker: { }
 deploy:
   kubectl:
     manifests:
-      - deployment/currencyconversion-deployment.yaml
-      - deployment/currencyexchange-deployment.yaml
-      - deployment/ingress-gateway.yaml
-      - deployment/rbac.yml
+      - deployment/currency-service/currency-conversion/currencyconversion-*.yaml
+      - deployment/currency-service/currency-exchange/currencyexchange-*.yaml
