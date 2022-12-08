@@ -2,14 +2,20 @@ apiVersion: skaffold/v2beta19
 kind: Config
 metadata:
   name: currencyservice
+
 build:
+  tagPolicy:
+    sha256: { }
+  local:
+    push: true
   artifacts:
     - image: amsidhmicroservice/currencyconversion
       context: currency-conversion
-      docker: { }
+      jib: {}
     - image: amsidhmicroservice/currencyexchange
       context: currency-exchange
-      docker: { }
+      jib: {}
+
 deploy:
   kubectl:
     manifests:
