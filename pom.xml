@@ -174,12 +174,28 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <!-- Sonar Properties-->
-                <sourceDirectory>${basedir}/src/main</sourceDirectory>
+                <!-- Sonar Properties for Local SonarQube-->
+                <!--<sourceDirectory>${basedir}/src/main</sourceDirectory>
                 <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
                 <sonar.host.url>http://localhost:9000</sonar.host.url>
                 <sonar.login>admin</sonar.login>
                 <sonar.password>admin123</sonar.password>
+                <sonar.scm.disabled>true</sonar.scm.disabled>
+                <sonar.scm.provider>git</sonar.scm.provider>
+                <sonar.log.level>TRACE</sonar.log.level>
+                <sonar.verbose>true</sonar.verbose>
+                <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+
+                <sonar.tsql.file.suffixes>sql,tsql</sonar.tsql.file.suffixes>
+                <sonar.plsql.file.suffixes>pks,pkb</sonar.plsql.file.suffixes>
+-->
+
+                <!-- Sonar Properties for SonarCloud-->
+                <sourceDirectory>${basedir}/src/main</sourceDirectory>
+                <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.organization>amsidhmicroservice</sonar.organization>
+                <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
                 <sonar.scm.disabled>true</sonar.scm.disabled>
                 <sonar.scm.provider>git</sonar.scm.provider>
                 <sonar.log.level>TRACE</sonar.log.level>
