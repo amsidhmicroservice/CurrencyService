@@ -1,5 +1,6 @@
 package com.amsidh.mvc.currencyconversion.controller;
 
+import com.amsidh.mvc.currencyconversion.client.feign.CurrencyExchangeFeignClient;
 import com.amsidh.mvc.currencyconversion.client.response.Exchange;
 import com.amsidh.mvc.currencyconversion.response.CurrencyConversionResponse;
 import com.amsidh.mvc.currencyconversion.service.InstanceInformationService;
@@ -21,8 +22,9 @@ import java.math.BigDecimal;
 @RequestMapping("/currency-conversion")
 public class ConversionController {
 
-    private final RestTemplate restTemplate;
+    //private final RestTemplate restTemplate;
     private final InstanceInformationService instanceInformationService;
+    private final CurrencyExchangeFeignClient currencyExchangeFeignClient;
 
     @Value("${CURRENCY_EXCHANGE_URL:http://localhost:8181}")
     public String currencyExchangeUrl;
@@ -34,7 +36,8 @@ public class ConversionController {
         log.info("Inside convertCurrency method of ConversionController!!!");
         String currencyExchangeUrlFullPath = currencyExchangeUrl + "/currency-exchange/" + currencyFrom + "/to/" + currencyTo;
         log.info("Calling CurrencyExchange service with url " + currencyExchangeUrlFullPath);
-        Exchange exchange = restTemplate.getForEntity(currencyExchangeUrlFullPath, Exchange.class).getBody();
+        Exchange exchange = currencyExchangeFeignClient.getCurrencyExchangeForFromAndTo(currencyFrom,currencyTo);
+                //restTemplate.getForEntity(currencyExchangeUrlFullPath, Exchange.class).getBody();
 
         CurrencyConversionResponse.CurrencyConversionResponseBuilder builder = CurrencyConversionResponse.builder()
                 .from(currencyFrom)
