@@ -36,10 +36,7 @@ data:
         @type json
       </parse>
     </filter>
-    
-    <filter kubernetes.**>
-      @type kubernetes_metadata
-    </filter>
+
   elastic-fluent.conf: |-
     <match **>
       @type elasticsearch
