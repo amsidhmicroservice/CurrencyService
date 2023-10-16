@@ -8,77 +8,101 @@ metadata:
 data:
   fluent.conf: |-
     ################################################################
-    # This source gets all logs from local docker host
-    @include pods-kind-fluent.conf
-    #@include pods-fluent.conf
-    #@include file-fluent.conf
-    @include elastic-fluent.conf
-  pods-kind-fluent.conf: |-
+    <system>
+    root_dir /tmp/fluentd-buffers/
+    </system>
+    <label @FLUENT_LOG>
+    <match fluent.**>
+    @type stdout
+    </match>
+    </label>
     <source>
+      @id source-currency-id
       @type tail
+      path /var/log/containers/currency*.log
+      pos_file /var/log/currency.log.pos
+      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio-*", "/var/log/containers/kube-*", "/var/log/containers/gke-*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/konnectivity*", "/var/log/containers/kiali-*", "/var/log/containers/fluentbit-*", "/var/log/containers/fluentd-*", "/var/log/containers/*_istio-*", "/var/log/containers/l7-default-backend-*"]
+      tag  raw.kubernetes.*
       read_from_head true
-      tag kubernetes.*
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/prometheus*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/pdcsi*" ]
+      refresh_interval 5s
+      encoding UTF-8
       <parse>
-        @type regexp
-        #https://regex101.com/r/ZkOBTI/1
-        expression ^(?<time>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.[^Z]*Z)\s(?<stream>[^\s]+)\s(?<character>[^\s])\s(?<message>.*)$
-        #time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type multi_format
+        <pattern>
+          format json
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+          time_type string
+          keep_time_key false
+        </pattern>
+        <pattern>
+          format regexp
+          expression /^(?<@timestamp>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+          keep_time_key false
+        </pattern>
+        <pattern>
+          format none
+        </pattern>
       </parse>
     </source>
-
-    <filter kubernetes.**>
-      @type kubernetes_metadata
-      @id filter_kube_metadata
-      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
-      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
-      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
-      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
-      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
-      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
-      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
-    </filter>
-  pods-fluent.conf: |-
-    <source>
-      @type tail
-      read_from_head true
-      tag kubernetes.*
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      exclude_path ["/var/log/containers/fluent*", "/var/log/containers/monitoring*", "/var/log/containers/elastic*", "/var/log/containers/kibana*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/prometheus*", "/var/log/containers/istio*", "/var/log/containers/kube*", "/var/log/containers/gke*", "/var/log/containers/metrics*", "/var/log/containers/prometheus*", "/var/log/containers/pdcsi*", "/var/log/containers/pdcsi*" ]
-      <parse>
-        @type kubernetes
-        @type "#{ENV['FLUENT_CONTAINER_TAIL_PARSER_TYPE'] || 'json'}"
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
-      </parse>
-    </source>
-
-    <filter kubernetes.**>
-      @type kubernetes_metadata
-      @id filter_kube_metadata
-      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
-      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
-      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
-      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
-      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
-      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
-      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
-    </filter>
-  file-fluent.conf: |-
-    <match **>
-      @type file
-      path /tmp/file-test.log
+    # Detect exceptions in the log output and forward them as one log entry.
+    <match raw.kubernetes.**>
+      @id detect_exceptions_id
+      @type detect_exceptions
+      remove_tag_prefix raw
+      message log
+      stream stream
+      multiline_flush_interval 5
+      max_bytes 500000
+      max_lines 1000
     </match>
-  elastic-fluent.conf: |-
+    
+    <filter **>
+      @id filter_kubernetes_metadata_id
+      @type kubernetes_metadata
+      allow_orphans false
+      skip_labels true
+      skip_container_metadata true
+      skip_master_url true
+      skip_namespace_metadata true
+    </filter>  
+    
     <match **>
-      @type elasticsearch_dynamic
-      @log_level info
-      include_tag_key true
-      host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
-      port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
-      reload_connections true
-      logstash_format true
-      logstash_prefix ${record['kubernetes']['pod_name']}
+      @id multi_target
+      @type copy
+      <store>
+        @id ms-elastic-store
+        @type elasticsearch_dynamic
+        @log_level debug
+        include_tag_key true
+        time_key_exclude_timestamp false
+        host "#{ENV['FLUENT_ELASTICSEARCH_HOST'] || 'elasticsearch.elastic-kibana'}"
+        port "#{ENV['FLUENT_ELASTICSEARCH_PORT'] || '9200'}"
+        suppress_type_name true
+        logstash_format true
+        logstash_prefix ms-${record['kubernetes']['container_name']}
+        logstash_dateformat %Y.%m.%d
+        type_name fluentd
+        reconnect_on_error true
+        reload_on_failure false
+        reload_connections false
+        slow_flush_log_threshold 25.0
+        <buffer tag>
+          @type file
+          path /var/log/fluentd-buffers/ms-currency-service
+          total_limit_size 1024MB
+          flush_mode interval
+          retry_type exponential_backoff
+          flush_thread_count 20
+          flush_interval 5s
+          retry_timeout 1m
+          retry_max_interval 30
+          chunk_limit_size 10M
+          queue_limit_length 8
+          overflow_action drop_oldest_chunk
+          timekey 0.1h
+        </buffer>
+      </store>
     </match>
+
+

@@ -24,9 +24,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      - hibernate.format_sql: true
+    show-sql: false
   sql:
     init:
       platform: h2
@@ -62,9 +60,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      - hibernate.format_sql: true
+    show-sql: false
   sql:
     init:
       platform: h2
@@ -99,9 +95,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      - hibernate.format_sql: true
+    show-sql: false
   sql:
     init:
       platform: h2
@@ -138,8 +132,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      - hibernate.format_sql: true
   sql:
     init:
       platform: h2

@@ -23,7 +23,7 @@ spec:
           privileged: true
       containers:
       - name: elasticsearch
-        image: elasticsearch:7.9.1
+        image: elasticsearch:7.17.9
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9200

@@ -19,6 +19,10 @@ import java.math.BigDecimal;
 
 import static net.logstash.logback.argument.StructuredArguments.v;
 
+/**
+ * @author amsid
+ *
+ */
 @RequiredArgsConstructor
 @Slf4j
 @RestController

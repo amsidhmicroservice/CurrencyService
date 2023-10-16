@@ -25,7 +25,7 @@ public class ExchangeController {
         log.info("=======Start Request=======");
         log.debug("healthCheck method of ExchangeController on host " + instanceInformationService.retrieveInstanceInfo());
         log.info("=======End Request=======");
-        return "{status:up}";
+        return "{\"status\": \"up\"}";
     }
 
     //http://34.121.35.177:8181/currency-exchange/USD/to/INR

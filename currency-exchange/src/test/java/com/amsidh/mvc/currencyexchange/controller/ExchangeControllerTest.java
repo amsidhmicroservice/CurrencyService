@@ -46,7 +46,7 @@ class ExchangeControllerTest {
         log.info("Evaluate the response");
         //Evaluate the response
         Assertions.assertEquals(200, response.getStatus());
-        Assertions.assertEquals("{status:up}", response.getContentAsString());
+        Assertions.assertEquals("{\"status\": \"up\"}", response.getContentAsString());
     }
 
     @Test
