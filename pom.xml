@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.7</version>
+        <version>3.2.3</version>
         <relativePath/>
     </parent>
     <groupId>com.amsidh.mvc</groupId>
@@ -16,10 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
-        <spring-cloud.version>2021.0.2</spring-cloud.version>
-        <sonar.sources>.</sonar.sources>
-        <sonar.inclusions>pom.xml,/pom.xml,src/main/**,/src/test/**</sonar.inclusions>
+        <java.version>17</java.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -34,14 +32,22 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+            <version>1.2.4</version>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+
+
         <!-- Log Message in Json -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.1.1</version>
+            <version>7.4</version>
         </dependency>
 
         <dependency>
@@ -60,17 +66,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- OpenTracing dependencies-->
-        <dependency>
-            <groupId>io.opentracing.brave</groupId>
-            <artifactId>brave-opentracing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-        </dependency>
-
 
     </dependencies>
     <dependencyManagement>
@@ -97,17 +92,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                    <image>
-                        <name>amsidhmicroservice/kube-${project.artifactId}:${project.version}</name>
-                        <pullPolicy>IF_NOT_PRESENT</pullPolicy>
-                        <publish>true</publish>
-                    </image>
-                    <docker>
-                        <publishRegistry>
-                            <username>amsidhmicroservice</username>
-                            <password>fbb0632c-f6e3-4c1c-8a50-c1c8633cc7c1</password>
-                        </publishRegistry>
-                    </docker>
                 </configuration>
             </plugin>
         </plugins>
@@ -117,79 +101,4 @@
         <module>currency-exchange</module>
         <module>currency-conversion</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>sonar</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <!-- Sonar Properties-->
-                <sonar.sources>.</sonar.sources>
-                <sonar.inclusions>pom.xml,/pom.xml,src/main/**</sonar.inclusions>
-                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-                <sonar.login>d2f629484963979b984a20fe67e8d31a5ebfd5a2</sonar.login>
-                <sonar.organization>amsidhmicroservice</sonar.organization>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
-                        <executions>
-                            <execution>
-                                <id>sonar-cloud</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>sonar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.2</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.22.2</version>
-                        <executions>
-                            <execution>
-                                <id>integration-test</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.5</version>
-                        <executions>
-                            <execution>
-                                <id>prepare-and-report</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report-aggregate</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>report-aggregate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-    </profiles>
 </project>

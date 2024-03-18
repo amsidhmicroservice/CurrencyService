@@ -1,3 +1,0 @@
-Blue-Green with canary deployment strategy will keep both the version up V1 and V2.
- We can configure the traffic need to send to each version based on weight percentage.
-
