@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include
-            resource="org/springframework/boot/logging/logback/defaults.xml"/>
+            resource="org/springframework/boot/logging/logback/defaults.xml" />
     <springProperty scope="context" name="service-name"
-                    source="spring.application.name"/>
+                    source="spring.application.name" />
     <springProperty scope="context" name="version"
-                    source="info.app.version"/>
+                    source="info.app.version" />
     <appender name="stdout"
               class="ch.qos.logback.core.ConsoleAppender">
         <encoder
@@ -14,9 +14,9 @@
                 <timestamp>
                     <fieldName>@timestamp</fieldName>
                     <pattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</pattern>
-                    <timeZone>DEFAULT</timeZone>
+                    <timeZone>Asia/Kolkata</timeZone>
                 </timestamp>
-                <context/>
+                <context />
 
                 <pattern>
                     <pattern>
@@ -67,13 +67,13 @@
                     <fieldName>exception</fieldName>
                     <throwableConverter
                             class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-                        <shortenedClassNameLength>short</shortenedClassNameLength>
-                        <maxDepthPerThrowable>short</maxDepthPerThrowable>
-                        <maxLength>short</maxLength>
+                        <shortenedClassNameLength>30</shortenedClassNameLength>
+                        <maxDepthPerThrowable>10</maxDepthPerThrowable>
+                        <maxLength>150</maxLength>
                         <rootCauseFirst>true</rootCauseFirst>
                     </throwableConverter>
                 </stackTrace>
-                <logstashMarkers/>
+                <logstashMarkers />
             </providers>
         </encoder>
 
@@ -82,6 +82,6 @@
 
 
     <root level="info">
-        <appender-ref ref="stdout"/>
+        <appender-ref ref="stdout" />
     </root>
 </configuration>
