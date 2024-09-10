@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include
-            resource="org/springframework/boot/logging/logback/defaults.xml" />
-    <springProperty scope="context" name="service-name"
-                    source="spring.application.name" />
-    <springProperty scope="context" name="version"
-                    source="info.app.version" />
-    <appender name="stdout"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <encoder
-                class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <springProperty scope="context" name="service-name" source="spring.application.name" />
+    <springProperty scope="context" name="version" source="info.app.version" />
+
+    <!-- Console Appender -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
                     <fieldName>@timestamp</fieldName>
@@ -17,10 +15,9 @@
                     <timeZone>Asia/Kolkata</timeZone>
                 </timestamp>
                 <context />
-
                 <pattern>
+                    <omitEmptyFields>true</omitEmptyFields>
                     <pattern>
-                        <omitEmptyFields>true</omitEmptyFields>
                         {
                         "correlationId": "%mdc{traceId}",
                         "request-tracking": {
@@ -31,7 +28,6 @@
                         }
                     </pattern>
                 </pattern>
-
                 <loggerName>
                     <fieldName>logger</fieldName>
                 </loggerName>
@@ -56,7 +52,6 @@
                 <threadName>
                     <fieldName>thread</fieldName>
                 </threadName>
-
                 <arguments>
                     <includeNonStructuredArguments>true</includeNonStructuredArguments>
                 </arguments>
@@ -65,8 +60,7 @@
                 </stackHash>
                 <stackTrace>
                     <fieldName>exception</fieldName>
-                    <throwableConverter
-                            class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
                         <shortenedClassNameLength>30</shortenedClassNameLength>
                         <maxDepthPerThrowable>10</maxDepthPerThrowable>
                         <maxLength>150</maxLength>
@@ -76,12 +70,25 @@
                 <logstashMarkers />
             </providers>
         </encoder>
-
-
     </appender>
 
-
-    <root level="info">
+    <!-- Async Appender -->
+    <appender name="asyncStdout" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="stdout" />
+        <!-- Set a larger buffer size for handling burst traffic -->
+        <queueSize>10000</queueSize>
+        <!-- Ensure no log events are discarded -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- Allow blocking to ensure no log events are lost -->
+        <neverBlock>true</neverBlock>
+        <!-- Log an error if a log event takes too long to be processed -->
+        <maxFlushTime>10000</maxFlushTime> <!-- max time in ms to wait for logging thread -->
+        <!-- Include caller data to debug issues faster -->
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+    <!-- Use the async appender in the root logger -->
+    <root level="info">
+        <appender-ref ref="asyncStdout" />
     </root>
 </configuration>
